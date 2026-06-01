@@ -668,19 +668,7 @@ tbody tr:hover td { background: var(--surface2); }
           <input type="text" id="f-ref" placeholder="Optioneel">
         </div>
 
-        <div id="f-forecast-popup" style="display:none;padding:10px 14px;background:#E1F5EE;border:1px solid #5DCAA5;border-radius:8px;margin-bottom:8px">
-          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px">
-            <div>
-              <div style="font-size:13px;font-weight:600;color:#0F6E56">Forecast gevonden!</div>
-              <div style="font-size:12px;color:#0F6E56;margin-top:2px" id="f-forecast-popup-tekst"></div>
-            </div>
-            <div style="display:flex;gap:6px;flex-shrink:0">
-              <button class="btn sm" onclick="koppelForecastPopup()" style="background:#1D9E75;color:white;border-color:#1D9E75;font-size:12px">Ja, koppelen</button>
-              <button class="btn sm" onclick="document.getElementById('f-forecast-popup').style.display='none'" style="font-size:12px">Nee</button>
-            </div>
-          </div>
-        </div>
-        <input type="hidden" id="f-forecast-koppeling" value="">
+
 
         <div class="form-group">
           <label>Soort factuur <span style="font-size:11px;color:var(--text-hint);font-weight:400">(intern)</span></label>
@@ -737,7 +725,7 @@ tbody tr:hover td { background: var(--surface2); }
 
         <div class="form-group">
           <label>Bedrijfsnaam *</label>
-          <input type="text" id="f-klant-naam" placeholder="" oninput="checkNieuweKlant();checkForecastMatch()">
+          <input type="text" id="f-klant-naam" placeholder="" oninput="checkNieuweKlant()">
         </div>
 
         <div class="form-group">
@@ -1531,7 +1519,7 @@ function showPage(id) {
   if(id === 'facturen') renderFactuurTabel();
   if(id === 'klanten') renderKlantTabel();
   if(id === 'producten') renderDienstTabel();
-  if(id === 'nieuwe-factuur') { initNieuweFactuur(); laadForecastKoppelingen(); }
+  if(id === 'nieuwe-factuur') { initNieuweFactuur(); }
   if(id === 'instellingen') laadInstellingen();
   if(id === 'maand-facturen') renderMaandFacturen();
   if(id === 'ytd-overzicht') renderYTDOverzicht();
@@ -1642,8 +1630,7 @@ function vulKlantIn() {
   }
   var banner = document.getElementById('f-nieuwe-klant-banner');
   if(banner) banner.style.display = 'none';
-  checkForecastMatch();
-}
+  }
 
 
 function voegRegelToe(bestaand=null) {
@@ -1984,8 +1971,9 @@ function renderFactuurTabel() {
     <td>
       <div style="display:flex;gap:6px">
         <button class="btn sm" onclick="bewerkFactuur('${f.id}')">Bewerken</button>
-        ${f.status!=='betaald'?`<button class="btn sm" style="color:var(--green-dark)" onclick="markeerBetaald('${f.id}')">✓ Betaald</button>`:''}
+        ${f.status!=='betaald'?`<button class="btn sm" style="color:var(--green-dark)" onclick="markeerBetaald('${f.id}');renderFactuurTabel()">✓ Betaald</button>`:''}
         <button class="btn sm" onclick="previewFactuur('${f.id}')">PDF</button>
+        <button class="btn sm danger" onclick="verwijderFactuur('${f.id}')">Verwijder</button>
       </div>
     </td>
   </tr>`).join('');
@@ -2812,8 +2800,7 @@ function onTypeDienstChange() {
   if(kg) kg.style.display = isWS ? 'block' : 'none';
   if(wg) wg.style.display = isWS ? 'block' : 'none';
   if(isWS) updateWSOmschrijving();
-  checkForecastMatch();
-}
+  }
 
 function updateWSOmschrijving() {
   var naam = document.getElementById('f-kandidaat') ? document.getElementById('f-kandidaat').value.trim() : '';
@@ -3511,8 +3498,7 @@ function downloadApp() {
 // ============================================================
 function laadForecastKoppelingen() {
   // Called when klant changes - check for matching forecast
-  checkForecastMatch();
-}
+  }
 
 function checkForecastMatch() {
   var klantNaam = document.getElementById('f-klant-naam') ? document.getElementById('f-klant-naam').value : '';
@@ -3610,8 +3596,7 @@ function koppelFactuurAanForecast(factuurId) {
 // ============================================================
 function laadForecastKoppelingen() {
   // Called when klant changes - check for matching forecast
-  checkForecastMatch();
-}
+  }
 
 function checkForecastMatch() {
   var klantNaam = document.getElementById('f-klant-naam') ? document.getElementById('f-klant-naam').value : '';
@@ -3903,10 +3888,8 @@ function openEmailPreview() {
   var grand = f.grand || 0;
 
   document.getElementById('email-aan').value = klantEmail;
-  var ccAdressen = [];
-  if(instellingen.emailCC) ccAdressen.push(instellingen.emailCC);
-  if(instellingen.emailBoekhouder) ccAdressen.push(instellingen.emailBoekhouder);
-  document.getElementById('email-cc').value = ccAdressen.join(', ');
+  // CC leeg laten in testmodus - vul zelf in bij versturen
+  document.getElementById('email-cc').value = '';
   document.getElementById('email-onderwerp').value = 'Factuur ' + nummer + ' — ' + (instellingen.naam||'Maseto BV');
 
   var aanhef = 'Geachte ' + (f.klantContact ? f.klantContact : 'medewerker crediteurenadministratie') + ',';
@@ -4264,6 +4247,27 @@ async function laadVanBackend() {
   toast('Data geladen van backend');
   renderDashboard();
   return true;
+}
+
+
+function vulEchtKlantIn() {
+  var f = getFactuurData();
+  document.getElementById('email-aan').value = f.klantEmail || '';
+  var ccAdressen = [];
+  if(instellingen.emailCC) ccAdressen.push(instellingen.emailCC);
+  if(instellingen.emailBoekhouder) ccAdressen.push(instellingen.emailBoekhouder);
+  document.getElementById('email-cc').value = ccAdressen.join(', ');
+}
+
+
+function verwijderFactuur(id) {
+  var f = facturen.find(function(x){return x.id===id;});
+  if(!f) return;
+  if(!confirm('Factuur ' + (f.nummer||id) + ' verwijderen?')) return;
+  facturen = facturen.filter(function(x){return x.id!==id;});
+  save('maseto_facturen', facturen);
+  renderFactuurTabel();
+  toast('Factuur verwijderd');
 }
 
 // --- INIT ---

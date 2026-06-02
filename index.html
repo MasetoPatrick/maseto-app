@@ -1181,6 +1181,7 @@ tbody tr:hover td { background: var(--surface2); }
           </div>
           <div id="f-ws-fixed-velden" style="display: none;">
             <div class="form-group"><label>Vast bedrag fee (€)</label><input type="number" id="f-fee-fixed" placeholder="0" step="100" oninput="berekenWSFeeFixed()"></div>
+            <div class="form-group"><label>Aantal termijnen <span style="font-size:11px;color:var(--text-hint)">(bijv. 2 of 3 facturen)</span></label><input type="number" id="f-ws-termijnen" placeholder="1" min="1" value="1" style="width:100%" title="Vul 2 of 3 in om de fee over meerdere facturen te verdelen"></div>
           </div>
           <div id="f-ws-fee-preview" style="font-size: 12px; color: var(--green-dark); margin-bottom: 8px; padding: 6px 10px; background: var(--green-light); border-radius: 6px; display: none;">Vast bedrag: €&nbsp;6.842,88 excl. BTW</div>
         </div>
@@ -1631,6 +1632,8 @@ ASML B.V.,Jan de Vries,Eindhoven..." style="width:100%;padding:9px 12px;border:1
       <div class="card-title" id="jaardoelen-titel">Jaardoelen 2026</div>
       <div class="form-group"><label>Omzetdoel (€)</label><input type="number" id="s-goal-omzet" value="150000" step="5000"></div>
       <div class="form-group"><label>Plaatsingsdoel</label><input type="number" id="s-goal-plaatsingen" value="20"></div>
+      <div class="form-group"><label>Werkelijke omzet 2024 (€)</label><input type="number" id="s-omzet-2024" placeholder="0" step="1000"></div>
+      <div class="form-group"><label>Werkelijke omzet 2025 (€)</label><input type="number" id="s-omzet-2025" placeholder="0" step="1000"></div>
     </div>
     <button class="btn primary" onclick="slaInstellingenOp()">Instellingen opslaan</button>
   </div>
@@ -1989,6 +1992,7 @@ ASML B.V.,Jan de Vries,Eindhoven..." style="width:100%;padding:9px 12px;border:1
     <div class="form-group"><label>Email</label><input type="email" id="km-email" placeholder="facturen@bedrijf.nl"></div>
     <div class="form-group"><label>Telefoon</label><input type="tel" id="km-tel" placeholder="020 1234567"></div>
     <div class="form-group"><label>BTW-nummer</label><input type="text" id="km-btwn" placeholder="NL..."></div>
+    <div class="form-group"><label>Betalingstermijn (dagen)</label><input type="number" id="km-termijn" placeholder="30" min="0"></div>
     <input type="hidden" id="km-id" value="">
     <div style="display:flex;gap:10px;margin-top:1rem">
       <button class="btn primary" onclick="slaKlantOp()">Opslaan</button>
@@ -2198,7 +2202,14 @@ function initNieuweFactuur(factuur) {
   // Klant dropdown
   var sel = document.getElementById('f-klant-select');
   if(sel) {
-    var sortedKlanten = [...klanten].sort(function(a,b){return (a.naam||'').localeCompare(b.naam||'','nl');});
+    // Sorteer op gebruik (meest gebruikt bovenaan), daarna alfabetisch
+    var klantGebruik = {};
+    facturen.forEach(function(f){ if(f.klantNaam) klantGebruik[f.klantNaam] = (klantGebruik[f.klantNaam]||0)+1; });
+    var sortedKlanten = [...klanten].sort(function(a,b){
+      var ua = klantGebruik[a.naam]||0, ub = klantGebruik[b.naam]||0;
+      if(ub !== ua) return ub - ua;
+      return (a.naam||'').localeCompare(b.naam||'','nl');
+    });
     sel.innerHTML = '<option value="">— Nieuwe klant / handmatig —</option>' + sortedKlanten.map(function(k) { return '<option value="' + k.id + '">' + k.naam + '</option>'; }).join('');
     // Selecteer de juiste klant bij bewerken
     if(factuur && factuur.klantNaam) {
@@ -2343,6 +2354,7 @@ function getFactuurData() {
     jaarsalaris: parseFloat(get('f-jaarsalaris')) || 0,
     feePct: parseFloat(get('f-fee-pct')) || 20,
     feeFixed: parseFloat(get('f-fee-fixed')) || 0,
+    wsTermijnen: parseInt(get('f-ws-termijnen')) || 1,
     klantNaam: get('f-klant-naam'),
     klantBtwNr: get('f-klant-btwnr'),
     klantContact: get('f-klant-contact'),
@@ -2365,6 +2377,9 @@ function getFactuurData() {
 
 function slaConceptOp() {
   const f = getFactuurData();
+  if(!f.klantNaam) { toast('Vul eerst een klantnaam in'); return; }
+  if(!f.nummer) { reserveerFactuurNr(); f.nummer = document.getElementById('f-nummer').value; }
+  if(!f.nummer) { toast('Genereer eerst een factuurnummer'); return; }
   f.status = 'concept';
   slaFactuurOpIntern(f);
   toast('Concept opgeslagen');
@@ -2836,6 +2851,7 @@ function openKlantModal(id=null) {
   document.getElementById('km-adres').value = k?.adres||'';
   document.getElementById('km-pc').value = k?.pc||'';
   if(document.getElementById('km-hnr')) document.getElementById('km-hnr').value = k?.hnr||'';
+  if(document.getElementById('km-termijn')) document.getElementById('km-termijn').value = k?.termijn||'';
   document.getElementById('km-plaats').value = k?.plaats||'';
   document.getElementById('km-email').value = k?.email||'';
   document.getElementById('km-tel').value = k?.tel||'';
@@ -2847,7 +2863,7 @@ function slaKlantOp() {
   const naam = document.getElementById('km-naam').value.trim();
   if(!naam) { toast('Vul een bedrijfsnaam in'); return; }
   const id = document.getElementById('km-id').value || uid();
-  const k = {id, naam, contact:document.getElementById('km-contact').value, adres:document.getElementById('km-adres').value, pc:document.getElementById('km-pc').value, hnr:document.getElementById('km-hnr')?document.getElementById('km-hnr').value:'', plaats:document.getElementById('km-plaats').value, email:document.getElementById('km-email').value, tel:document.getElementById('km-tel').value, btwNr:document.getElementById('km-btwn').value};
+  const termijnEl = document.getElementById('km-termijn'); const k = {id, naam, contact:document.getElementById('km-contact').value, adres:document.getElementById('km-adres').value, pc:document.getElementById('km-pc').value, hnr:document.getElementById('km-hnr')?document.getElementById('km-hnr').value:'', plaats:document.getElementById('km-plaats').value, email:document.getElementById('km-email').value, tel:document.getElementById('km-tel').value, btwNr:document.getElementById('km-btwn').value, termijn:termijnEl?parseInt(termijnEl.value)||0:0};
   const idx = klanten.findIndex(x=>x.id===id);
   if(idx>-1) klanten[idx]=k; else klanten.push(k);
   save('maseto_klanten', klanten);
@@ -2939,6 +2955,8 @@ function laadInstellingen() {
   document.getElementById('s-notitie').value = instellingen.notitie||'';
   document.getElementById('s-goal-omzet').value = instellingen.goalOmzet||150000;
   document.getElementById('s-goal-plaatsingen').value = instellingen.goalPlaatsingen||20;
+  if(document.getElementById('s-omzet-2024')) document.getElementById('s-omzet-2024').value = instellingen.omzet2024||'';
+  if(document.getElementById('s-omzet-2025')) document.getElementById('s-omzet-2025').value = instellingen.omzet2025||'';
 }
 
 function downloadBackup() {
@@ -2999,6 +3017,8 @@ function slaInstellingenOp() {
     notitie:document.getElementById('s-notitie').value,
     goalOmzet:parseFloat(document.getElementById('s-goal-omzet').value)||150000,
     goalPlaatsingen:parseInt(document.getElementById('s-goal-plaatsingen').value)||20,
+    omzet2024:parseFloat(document.getElementById('s-omzet-2024').value)||0,
+    omzet2025:parseFloat(document.getElementById('s-omzet-2025').value)||0,
   };
   save('maseto_instellingen', instellingen);
   toast('Instellingen opgeslagen');

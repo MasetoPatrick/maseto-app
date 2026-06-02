@@ -241,11 +241,11 @@ tbody tr:hover td { background: var(--surface2); }
   </div>
   <nav class="sidebar-nav">
     <div class="nav-section">Facturatie</div>
-    <div class="nav-item" onclick="showPage('dashboard')">
+    <div class="nav-item active" onclick="showPage('dashboard')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect></svg>
       Dashboard
     </div>
-    <div class="nav-item active" onclick="showPage('nieuwe-factuur')">
+    <div class="nav-item" onclick="showPage('nieuwe-factuur')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
       Nieuwe factuur
     </div>
@@ -299,7 +299,7 @@ tbody tr:hover td { background: var(--surface2); }
 <main class="main">
 
 <!-- DASHBOARD -->
-<div class="page" id="page-dashboard">
+<div class="page active" id="page-dashboard">
   <div class="topbar no-print">
     <button class="hamburger" onclick="toggleSidebar()" aria-label="Menu">
       <span></span><span></span><span></span>
@@ -1126,12 +1126,12 @@ tbody tr:hover td { background: var(--surface2); }
 </div>
 
 <!-- NIEUWE FACTUUR -->
-<div class="page active" id="page-nieuwe-factuur">
+<div class="page" id="page-nieuwe-factuur">
   <div class="topbar no-print">
     <button class="hamburger" onclick="toggleSidebar()" aria-label="Menu"><span></span><span></span><span></span></button>
     <div style="display:flex;align-items:center;gap:10px">
       <span class="topbar-title" id="factuur-form-title">Nieuwe factuur</span>
-      <div id="f-status-badge" style="display:flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;background:var(--surface2);font-size:12px;font-weight:500;color:var(--text-muted)">
+      <div id="f-status-badge" style="display: flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 500; color: var(--text-muted);">
         <span id="f-status-dot" style="width: 7px; height: 7px; border-radius: 50%; background: var(--text-hint); display: inline-block;"></span>
         <span id="f-status-label">Concept</span>
       </div>
@@ -2633,11 +2633,11 @@ function renderFactuurTabel() {
 function bewerkFactuur(id) {
   var f = facturen.find(function(x){return x.id===id;});
   if(!f) return;
-  // Sla een diepe kopie op zodat bewerkingen niet direct de opgeslagen data wijzigen
   var fKopie = JSON.parse(JSON.stringify(f));
   bewerkFactuurId = id;
-  initNieuweFactuur(fKopie);
   showPage('nieuwe-factuur');
+  // Wacht tot de pagina zichtbaar is voordat velden worden ingevuld
+  setTimeout(function(){ initNieuweFactuur(fKopie); }, 50);
 }
 
 function markeerBetaald(id) {
@@ -4521,7 +4521,7 @@ function factuurOverzichtVoorKlant(naam) {
 // PDF DOWNLOAD via html2canvas + jsPDF
 // ============================================================
 function downloadPDF() {
-  var el = document.getElementById('factuur-preview-content');
+  var el = document.getElementById('preview-content');
   if(!el) { toast('Geen factuur om te downloaden'); return; }
   var f = getFactuurData();
   var bestandsnaam = 'Factuur-' + (f.nummer||'concept') + '-Maseto.pdf';

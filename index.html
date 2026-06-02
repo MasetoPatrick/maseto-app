@@ -249,7 +249,7 @@ tbody tr:hover td { background: var(--surface2); }
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
       Nieuwe factuur
     </div>
-    <div class="nav-item" onclick="showPage('facturen')">
+    <div class="nav-item active" onclick="showPage('facturen')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
       Facturen
     </div>
@@ -258,7 +258,7 @@ tbody tr:hover td { background: var(--surface2); }
       Historie
     </div>
     <div class="nav-section">Forecast</div>
-    <div class="nav-item active" onclick="showPage('prognose')">
+    <div class="nav-item" onclick="showPage('prognose')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line><polyline points="2 20 22 20"></polyline></svg>
       Forecast 2026
     </div>
@@ -553,7 +553,7 @@ tbody tr:hover td { background: var(--surface2); }
 </div>
 
 <!-- FACTUREN OVERZICHT -->
-<div class="page" id="page-facturen">
+<div class="page active" id="page-facturen">
   <div class="topbar no-print">
     <button class="hamburger" onclick="toggleSidebar()" aria-label="Menu">
       <span></span><span></span><span></span>
@@ -693,7 +693,7 @@ tbody tr:hover td { background: var(--surface2); }
     <td>
       <div style="display:flex;gap:6px">
         <button class="btn sm" onclick="bewerkFactuur('mpwp2n2bsnwwq')">Bewerken</button>
-        
+        <button class="btn sm" style="color:var(--amber)" onclick="markeerOnbetaald('mpwp2n2bsnwwq');renderFactuurTabel()">↩ Onbetaald</button>
         <button class="btn sm" onclick="previewFactuur('mpwp2n2bsnwwq')">PDF</button>
         <button class="btn sm danger" onclick="verwijderFactuur('mpwp2n2bsnwwq')">Verwijder</button>
       </div>
@@ -708,7 +708,7 @@ tbody tr:hover td { background: var(--surface2); }
     <td>
       <div style="display:flex;gap:6px">
         <button class="btn sm" onclick="bewerkFactuur('mpwoji76qlkwr')">Bewerken</button>
-        
+        <button class="btn sm" style="color:var(--amber)" onclick="markeerOnbetaald('mpwoji76qlkwr');renderFactuurTabel()">↩ Onbetaald</button>
         <button class="btn sm" onclick="previewFactuur('mpwoji76qlkwr')">PDF</button>
         <button class="btn sm danger" onclick="verwijderFactuur('mpwoji76qlkwr')">Verwijder</button>
       </div>
@@ -723,7 +723,7 @@ tbody tr:hover td { background: var(--surface2); }
     <td>
       <div style="display:flex;gap:6px">
         <button class="btn sm" onclick="bewerkFactuur('mpwoasb1rzozi')">Bewerken</button>
-        
+        <button class="btn sm" style="color:var(--amber)" onclick="markeerOnbetaald('mpwoasb1rzozi');renderFactuurTabel()">↩ Onbetaald</button>
         <button class="btn sm" onclick="previewFactuur('mpwoasb1rzozi')">PDF</button>
         <button class="btn sm danger" onclick="verwijderFactuur('mpwoasb1rzozi')">Verwijder</button>
       </div>
@@ -738,7 +738,7 @@ tbody tr:hover td { background: var(--surface2); }
     <td>
       <div style="display:flex;gap:6px">
         <button class="btn sm" onclick="bewerkFactuur('mpwoh1v5fv2ma')">Bewerken</button>
-        
+        <button class="btn sm" style="color:var(--amber)" onclick="markeerOnbetaald('mpwoh1v5fv2ma');renderFactuurTabel()">↩ Onbetaald</button>
         <button class="btn sm" onclick="previewFactuur('mpwoh1v5fv2ma')">PDF</button>
         <button class="btn sm danger" onclick="verwijderFactuur('mpwoh1v5fv2ma')">Verwijder</button>
       </div>
@@ -768,7 +768,7 @@ tbody tr:hover td { background: var(--surface2); }
     <td>
       <div style="display:flex;gap:6px">
         <button class="btn sm" onclick="bewerkFactuur('mpwml1ragzbwn')">Bewerken</button>
-        
+        <button class="btn sm" style="color:var(--amber)" onclick="markeerOnbetaald('mpwml1ragzbwn');renderFactuurTabel()">↩ Onbetaald</button>
         <button class="btn sm" onclick="previewFactuur('mpwml1ragzbwn')">PDF</button>
         <button class="btn sm danger" onclick="verwijderFactuur('mpwml1ragzbwn')">Verwijder</button>
       </div>
@@ -783,7 +783,7 @@ tbody tr:hover td { background: var(--surface2); }
     <td>
       <div style="display:flex;gap:6px">
         <button class="btn sm" onclick="bewerkFactuur('mpwmp8l6dv2z1')">Bewerken</button>
-        
+        <button class="btn sm" style="color:var(--amber)" onclick="markeerOnbetaald('mpwmp8l6dv2z1');renderFactuurTabel()">↩ Onbetaald</button>
         <button class="btn sm" onclick="previewFactuur('mpwmp8l6dv2z1')">PDF</button>
         <button class="btn sm danger" onclick="verwijderFactuur('mpwmp8l6dv2z1')">Verwijder</button>
       </div>
@@ -798,7 +798,7 @@ tbody tr:hover td { background: var(--surface2); }
     <td>
       <div style="display:flex;gap:6px">
         <button class="btn sm" onclick="bewerkFactuur('mpwksaxabuzdt')">Bewerken</button>
-        
+        <button class="btn sm" style="color:var(--amber)" onclick="markeerOnbetaald('mpwksaxabuzdt');renderFactuurTabel()">↩ Onbetaald</button>
         <button class="btn sm" onclick="previewFactuur('mpwksaxabuzdt')">PDF</button>
         <button class="btn sm danger" onclick="verwijderFactuur('mpwksaxabuzdt')">Verwijder</button>
       </div>
@@ -813,7 +813,7 @@ tbody tr:hover td { background: var(--surface2); }
     <td>
       <div style="display:flex;gap:6px">
         <button class="btn sm" onclick="bewerkFactuur('mpwkp5e75cq51')">Bewerken</button>
-        
+        <button class="btn sm" style="color:var(--amber)" onclick="markeerOnbetaald('mpwkp5e75cq51');renderFactuurTabel()">↩ Onbetaald</button>
         <button class="btn sm" onclick="previewFactuur('mpwkp5e75cq51')">PDF</button>
         <button class="btn sm danger" onclick="verwijderFactuur('mpwkp5e75cq51')">Verwijder</button>
       </div>
@@ -828,7 +828,7 @@ tbody tr:hover td { background: var(--surface2); }
     <td>
       <div style="display:flex;gap:6px">
         <button class="btn sm" onclick="bewerkFactuur('mpwkcdyvfjx8s')">Bewerken</button>
-        
+        <button class="btn sm" style="color:var(--amber)" onclick="markeerOnbetaald('mpwkcdyvfjx8s');renderFactuurTabel()">↩ Onbetaald</button>
         <button class="btn sm" onclick="previewFactuur('mpwkcdyvfjx8s')">PDF</button>
         <button class="btn sm danger" onclick="verwijderFactuur('mpwkcdyvfjx8s')">Verwijder</button>
       </div>
@@ -843,7 +843,7 @@ tbody tr:hover td { background: var(--surface2); }
     <td>
       <div style="display:flex;gap:6px">
         <button class="btn sm" onclick="bewerkFactuur('mpwk9tbytdaw9')">Bewerken</button>
-        
+        <button class="btn sm" style="color:var(--amber)" onclick="markeerOnbetaald('mpwk9tbytdaw9');renderFactuurTabel()">↩ Onbetaald</button>
         <button class="btn sm" onclick="previewFactuur('mpwk9tbytdaw9')">PDF</button>
         <button class="btn sm danger" onclick="verwijderFactuur('mpwk9tbytdaw9')">Verwijder</button>
       </div>
@@ -858,7 +858,7 @@ tbody tr:hover td { background: var(--surface2); }
     <td>
       <div style="display:flex;gap:6px">
         <button class="btn sm" onclick="bewerkFactuur('mpwk1zbu2atrs')">Bewerken</button>
-        
+        <button class="btn sm" style="color:var(--amber)" onclick="markeerOnbetaald('mpwk1zbu2atrs');renderFactuurTabel()">↩ Onbetaald</button>
         <button class="btn sm" onclick="previewFactuur('mpwk1zbu2atrs')">PDF</button>
         <button class="btn sm danger" onclick="verwijderFactuur('mpwk1zbu2atrs')">Verwijder</button>
       </div>
@@ -873,7 +873,7 @@ tbody tr:hover td { background: var(--surface2); }
     <td>
       <div style="display:flex;gap:6px">
         <button class="btn sm" onclick="bewerkFactuur('mpwk33h60cors')">Bewerken</button>
-        
+        <button class="btn sm" style="color:var(--amber)" onclick="markeerOnbetaald('mpwk33h60cors');renderFactuurTabel()">↩ Onbetaald</button>
         <button class="btn sm" onclick="previewFactuur('mpwk33h60cors')">PDF</button>
         <button class="btn sm danger" onclick="verwijderFactuur('mpwk33h60cors')">Verwijder</button>
       </div>
@@ -888,7 +888,7 @@ tbody tr:hover td { background: var(--surface2); }
     <td>
       <div style="display:flex;gap:6px">
         <button class="btn sm" onclick="bewerkFactuur('mpwjtng3dsldt')">Bewerken</button>
-        
+        <button class="btn sm" style="color:var(--amber)" onclick="markeerOnbetaald('mpwjtng3dsldt');renderFactuurTabel()">↩ Onbetaald</button>
         <button class="btn sm" onclick="previewFactuur('mpwjtng3dsldt')">PDF</button>
         <button class="btn sm danger" onclick="verwijderFactuur('mpwjtng3dsldt')">Verwijder</button>
       </div>
@@ -903,7 +903,7 @@ tbody tr:hover td { background: var(--surface2); }
     <td>
       <div style="display:flex;gap:6px">
         <button class="btn sm" onclick="bewerkFactuur('mpwjwi5sgafie')">Bewerken</button>
-        
+        <button class="btn sm" style="color:var(--amber)" onclick="markeerOnbetaald('mpwjwi5sgafie');renderFactuurTabel()">↩ Onbetaald</button>
         <button class="btn sm" onclick="previewFactuur('mpwjwi5sgafie')">PDF</button>
         <button class="btn sm danger" onclick="verwijderFactuur('mpwjwi5sgafie')">Verwijder</button>
       </div>
@@ -918,7 +918,7 @@ tbody tr:hover td { background: var(--surface2); }
     <td>
       <div style="display:flex;gap:6px">
         <button class="btn sm" onclick="bewerkFactuur('mpwjnu7uekwt7')">Bewerken</button>
-        
+        <button class="btn sm" style="color:var(--amber)" onclick="markeerOnbetaald('mpwjnu7uekwt7');renderFactuurTabel()">↩ Onbetaald</button>
         <button class="btn sm" onclick="previewFactuur('mpwjnu7uekwt7')">PDF</button>
         <button class="btn sm danger" onclick="verwijderFactuur('mpwjnu7uekwt7')">Verwijder</button>
       </div>
@@ -933,7 +933,7 @@ tbody tr:hover td { background: var(--surface2); }
     <td>
       <div style="display:flex;gap:6px">
         <button class="btn sm" onclick="bewerkFactuur('mpwjlwxx140r2')">Bewerken</button>
-        
+        <button class="btn sm" style="color:var(--amber)" onclick="markeerOnbetaald('mpwjlwxx140r2');renderFactuurTabel()">↩ Onbetaald</button>
         <button class="btn sm" onclick="previewFactuur('mpwjlwxx140r2')">PDF</button>
         <button class="btn sm danger" onclick="verwijderFactuur('mpwjlwxx140r2')">Verwijder</button>
       </div>
@@ -948,7 +948,7 @@ tbody tr:hover td { background: var(--surface2); }
     <td>
       <div style="display:flex;gap:6px">
         <button class="btn sm" onclick="bewerkFactuur('mpwgdhpfuky9x')">Bewerken</button>
-        
+        <button class="btn sm" style="color:var(--amber)" onclick="markeerOnbetaald('mpwgdhpfuky9x');renderFactuurTabel()">↩ Onbetaald</button>
         <button class="btn sm" onclick="previewFactuur('mpwgdhpfuky9x')">PDF</button>
         <button class="btn sm danger" onclick="verwijderFactuur('mpwgdhpfuky9x')">Verwijder</button>
       </div>
@@ -963,7 +963,7 @@ tbody tr:hover td { background: var(--surface2); }
     <td>
       <div style="display:flex;gap:6px">
         <button class="btn sm" onclick="bewerkFactuur('mpwggjwf499sq')">Bewerken</button>
-        
+        <button class="btn sm" style="color:var(--amber)" onclick="markeerOnbetaald('mpwggjwf499sq');renderFactuurTabel()">↩ Onbetaald</button>
         <button class="btn sm" onclick="previewFactuur('mpwggjwf499sq')">PDF</button>
         <button class="btn sm danger" onclick="verwijderFactuur('mpwggjwf499sq')">Verwijder</button>
       </div>
@@ -978,7 +978,7 @@ tbody tr:hover td { background: var(--surface2); }
     <td>
       <div style="display:flex;gap:6px">
         <button class="btn sm" onclick="bewerkFactuur('mpwgkzzhqavly')">Bewerken</button>
-        
+        <button class="btn sm" style="color:var(--amber)" onclick="markeerOnbetaald('mpwgkzzhqavly');renderFactuurTabel()">↩ Onbetaald</button>
         <button class="btn sm" onclick="previewFactuur('mpwgkzzhqavly')">PDF</button>
         <button class="btn sm danger" onclick="verwijderFactuur('mpwgkzzhqavly')">Verwijder</button>
       </div>
@@ -993,7 +993,7 @@ tbody tr:hover td { background: var(--surface2); }
     <td>
       <div style="display:flex;gap:6px">
         <button class="btn sm" onclick="bewerkFactuur('mpwg3yby8s4v4')">Bewerken</button>
-        
+        <button class="btn sm" style="color:var(--amber)" onclick="markeerOnbetaald('mpwg3yby8s4v4');renderFactuurTabel()">↩ Onbetaald</button>
         <button class="btn sm" onclick="previewFactuur('mpwg3yby8s4v4')">PDF</button>
         <button class="btn sm danger" onclick="verwijderFactuur('mpwg3yby8s4v4')">Verwijder</button>
       </div>
@@ -1008,7 +1008,7 @@ tbody tr:hover td { background: var(--surface2); }
     <td>
       <div style="display:flex;gap:6px">
         <button class="btn sm" onclick="bewerkFactuur('mpwfzp9uzjh5y')">Bewerken</button>
-        
+        <button class="btn sm" style="color:var(--amber)" onclick="markeerOnbetaald('mpwfzp9uzjh5y');renderFactuurTabel()">↩ Onbetaald</button>
         <button class="btn sm" onclick="previewFactuur('mpwfzp9uzjh5y')">PDF</button>
         <button class="btn sm danger" onclick="verwijderFactuur('mpwfzp9uzjh5y')">Verwijder</button>
       </div>
@@ -1023,7 +1023,7 @@ tbody tr:hover td { background: var(--surface2); }
     <td>
       <div style="display:flex;gap:6px">
         <button class="btn sm" onclick="bewerkFactuur('mpwfjb4biaocq')">Bewerken</button>
-        
+        <button class="btn sm" style="color:var(--amber)" onclick="markeerOnbetaald('mpwfjb4biaocq');renderFactuurTabel()">↩ Onbetaald</button>
         <button class="btn sm" onclick="previewFactuur('mpwfjb4biaocq')">PDF</button>
         <button class="btn sm danger" onclick="verwijderFactuur('mpwfjb4biaocq')">Verwijder</button>
       </div>
@@ -1038,7 +1038,7 @@ tbody tr:hover td { background: var(--surface2); }
     <td>
       <div style="display:flex;gap:6px">
         <button class="btn sm" onclick="bewerkFactuur('mpwfdmb8nvt2v')">Bewerken</button>
-        
+        <button class="btn sm" style="color:var(--amber)" onclick="markeerOnbetaald('mpwfdmb8nvt2v');renderFactuurTabel()">↩ Onbetaald</button>
         <button class="btn sm" onclick="previewFactuur('mpwfdmb8nvt2v')">PDF</button>
         <button class="btn sm danger" onclick="verwijderFactuur('mpwfdmb8nvt2v')">Verwijder</button>
       </div>
@@ -1053,7 +1053,7 @@ tbody tr:hover td { background: var(--surface2); }
     <td>
       <div style="display:flex;gap:6px">
         <button class="btn sm" onclick="bewerkFactuur('mpwch29jq1g6w')">Bewerken</button>
-        
+        <button class="btn sm" style="color:var(--amber)" onclick="markeerOnbetaald('mpwch29jq1g6w');renderFactuurTabel()">↩ Onbetaald</button>
         <button class="btn sm" onclick="previewFactuur('mpwch29jq1g6w')">PDF</button>
         <button class="btn sm danger" onclick="verwijderFactuur('mpwch29jq1g6w')">Verwijder</button>
       </div>
@@ -1068,7 +1068,7 @@ tbody tr:hover td { background: var(--surface2); }
     <td>
       <div style="display:flex;gap:6px">
         <button class="btn sm" onclick="bewerkFactuur('mpwc525e5xc2i')">Bewerken</button>
-        
+        <button class="btn sm" style="color:var(--amber)" onclick="markeerOnbetaald('mpwc525e5xc2i');renderFactuurTabel()">↩ Onbetaald</button>
         <button class="btn sm" onclick="previewFactuur('mpwc525e5xc2i')">PDF</button>
         <button class="btn sm danger" onclick="verwijderFactuur('mpwc525e5xc2i')">Verwijder</button>
       </div>
@@ -1083,7 +1083,7 @@ tbody tr:hover td { background: var(--surface2); }
     <td>
       <div style="display:flex;gap:6px">
         <button class="btn sm" onclick="bewerkFactuur('mpwbpgdbbhmme')">Bewerken</button>
-        
+        <button class="btn sm" style="color:var(--amber)" onclick="markeerOnbetaald('mpwbpgdbbhmme');renderFactuurTabel()">↩ Onbetaald</button>
         <button class="btn sm" onclick="previewFactuur('mpwbpgdbbhmme')">PDF</button>
         <button class="btn sm danger" onclick="verwijderFactuur('mpwbpgdbbhmme')">Verwijder</button>
       </div>
@@ -1098,7 +1098,7 @@ tbody tr:hover td { background: var(--surface2); }
     <td>
       <div style="display:flex;gap:6px">
         <button class="btn sm" onclick="bewerkFactuur('mpwbcyvktf4db')">Bewerken</button>
-        
+        <button class="btn sm" style="color:var(--amber)" onclick="markeerOnbetaald('mpwbcyvktf4db');renderFactuurTabel()">↩ Onbetaald</button>
         <button class="btn sm" onclick="previewFactuur('mpwbcyvktf4db')">PDF</button>
         <button class="btn sm danger" onclick="verwijderFactuur('mpwbcyvktf4db')">Verwijder</button>
       </div>
@@ -1113,7 +1113,7 @@ tbody tr:hover td { background: var(--surface2); }
     <td>
       <div style="display:flex;gap:6px">
         <button class="btn sm" onclick="bewerkFactuur('mpwawxw42tb6l')">Bewerken</button>
-        
+        <button class="btn sm" style="color:var(--amber)" onclick="markeerOnbetaald('mpwawxw42tb6l');renderFactuurTabel()">↩ Onbetaald</button>
         <button class="btn sm" onclick="previewFactuur('mpwawxw42tb6l')">PDF</button>
         <button class="btn sm danger" onclick="verwijderFactuur('mpwawxw42tb6l')">Verwijder</button>
       </div>
@@ -1132,7 +1132,7 @@ tbody tr:hover td { background: var(--surface2); }
     <div style="display:flex;align-items:center;gap:10px">
       <span class="topbar-title" id="factuur-form-title">Nieuwe factuur</span>
       <div id="f-status-badge" style="display:flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;background:var(--surface2);font-size:12px;font-weight:500;color:var(--text-muted)">
-        <span id="f-status-dot" style="width:7px;height:7px;border-radius:50%;background:var(--text-hint);display:inline-block"></span>
+        <span id="f-status-dot" style="width: 7px; height: 7px; border-radius: 50%; background: var(--text-hint); display: inline-block;"></span>
         <span id="f-status-label">Concept</span>
       </div>
     </div>
@@ -1230,7 +1230,7 @@ tbody tr:hover td { background: var(--surface2); }
 
         <div class="form-group">
           <label>Selecteer bestaande klant</label>
-          <select id="f-klant-select" onchange="vulKlantIn()"><option value="">— Nieuwe klant / handmatig —</option><option value="mpwat9gvjk6mu">Atla Propulsion Controls</option><option value="mpwb3ompmwt1g">Damen Dredging Equipment</option><option value="mpwfvtw2aho62">CRC-Evans BV</option><option value="mpwgjw99l9n7r">Savetech</option><option value="mpwk8gsa0p0ug">TGW Systems B.V.</option><option value="mpwmmqzsz9zsw">Dexion Nederland</option><option value="mpwn1avft4y3n">Dacon Inspection Technology B.V.</option><option value="mpwoe4cwb1b1e">Millro Productions</option><option value="mpwpkwyqw6gjp">Inventum Technologies</option></select>
+          <select id="f-klant-select" onchange="vulKlantIn()"><option value="">— Nieuwe klant / handmatig —</option><option value="mpwat9gvjk6mu">Atla Propulsion Controls</option><option value="mpwfvtw2aho62">CRC-Evans BV</option><option value="mpwn1avft4y3n">Dacon Inspection Technology B.V.</option><option value="mpwb3ompmwt1g">Damen Dredging Equipment</option><option value="mpwmmqzsz9zsw">Dexion Nederland</option><option value="mpwpkwyqw6gjp">Inventum Technologies</option><option value="mpwoe4cwb1b1e">Millro Productions</option><option value="mpwgjw99l9n7r">Savetech</option><option value="mpwk8gsa0p0ug">TGW Systems B.V.</option></select>
         </div>
 
         <div class="form-group field-error">
@@ -1636,6 +1636,15 @@ ASML B.V.,Jan de Vries,Eindhoven..." style="width:100%;padding:9px 12px;border:1
       <div class="form-group"><label>BTW-nummer</label><input type="text" id="s-btw" value="NL821055288B01"></div>
       <div class="form-group"><label>KvK-nummer</label><input type="text" id="s-kvk" value="32156365"></div>
       <div class="form-group"><label>IBAN</label><input type="text" id="s-iban" value="NL15RABO0149588917"></div>
+      <div style="background:#f0faf6;border:2px solid #1D9E75;border-radius:10px;padding:1rem 1.2rem;margin:1rem 0">
+        <div style="font-weight:600;font-size:14px;margin-bottom:4px;color:#1D9E75">💾 Data backup</div>
+        <div style="font-size:12.5px;color:var(--text-muted);margin-bottom:1rem">Sla alle facturen, klanten en producten op als bestand. Herstel bij een nieuwe app versie.</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn primary" onclick="downloadBackup()" style="flex:1;min-width:140px;font-size:13px">💾 Download backup</button>
+          <button class="btn" onclick="document.getElementById('backup-file-input').click()" style="flex:1;min-width:140px;font-size:13px">📂 Herstel backup</button>
+          <input type="file" id="backup-file-input" accept=".json" style="display:none" onchange="herstelBackup(event)">
+        </div>
+      </div>
       <div class="form-group"><label>Website</label><input type="text" id="s-web" value="www.maseto.nl"></div>
       <div class="form-group"><label>Telefoon</label><input type="text" id="s-tel" value="+31 (0)85 064 54 19"></div>
       <div class="form-group"><label>Email</label><input type="email" id="s-email" value="info@maseto.nl"></div>
@@ -1799,7 +1808,7 @@ ASML B.V.,Jan de Vries,Eindhoven..." style="width:100%;padding:9px 12px;border:1
 </div>
 
 <!-- PROGNOSE PAGE -->
-<div class="page active" id="page-prognose">
+<div class="page" id="page-prognose">
   <div class="topbar no-print">
     <button class="hamburger" onclick="toggleSidebar()" aria-label="Menu"><span></span><span></span><span></span></button>
     <span class="topbar-title">Prognose &amp; P&amp;L</span>
@@ -2219,8 +2228,22 @@ function initNieuweFactuur(factuur) {
 
   // Klant dropdown
   var sel = document.getElementById('f-klant-select');
-  if(sel) var sortedKlanten = [...klanten].sort(function(a,b){return (a.naam||'').localeCompare(b.naam||'','nl');});
-  sel.innerHTML = '<option value="">— Nieuwe klant / handmatig —</option>' + sortedKlanten.map(function(k) { return '<option value="' + k.id + '">' + k.naam + '</option>'; }).join('');
+  if(sel) {
+    var sortedKlanten = [...klanten].sort(function(a,b){return (a.naam||'').localeCompare(b.naam||'','nl');});
+    sel.innerHTML = '<option value="">— Nieuwe klant / handmatig —</option>' + sortedKlanten.map(function(k) { return '<option value="' + k.id + '">' + k.naam + '</option>'; }).join('');
+    // Selecteer de juiste klant bij bewerken
+    if(factuur && factuur.klantNaam) {
+      var gevondenKlant = klanten.find(function(k){ return k.naam === factuur.klantNaam; });
+      if(gevondenKlant) {
+        sel.value = gevondenKlant.id;
+        // Laad betalingstermijn van klant als factuur geen eigen termijn heeft
+        if(!factuur.termijn && gevondenKlant.termijn) {
+          var tEl = document.getElementById('f-termijn');
+          if(tEl) tEl.value = String(gevondenKlant.termijn);
+        }
+      }
+    }
+  }
 
   // Notities
   var notitieEl = document.getElementById('f-notities');
@@ -2573,13 +2596,10 @@ function downloadPDF() {
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>body{margin:2.5cm 2cm;font-family:'DM Sans',Arial,sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}@media print{body{margin:1.5cm}}</style>
-  </head><body>${bouwFactuurHTML(f, instellingen)}</body></html>`;
-  const blob = new Blob([html], {type:'text/html'});
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = `Factuur-${f.nummer}-Maseto.html`;
-  a.click(); URL.revokeObjectURL(url);
-  toast('Bestand gedownload — open in browser en druk Ctrl+P om te printen als PDF');
+  </head><body>${bouwFactuurHTML(f, instellingen)}<script>window.onload=function(){window.print();}<\/script></body></html>`;
+  const w = window.open('', '_blank');
+  if(w) { w.document.write(html); w.document.close(); }
+  else { toast('Sta popups toe voor deze site om PDF te openen'); }
 }
 
 function stuurEmail() {
@@ -2962,6 +2982,44 @@ function laadInstellingen() {
   document.getElementById('s-notitie').value = instellingen.notitie||'';
   document.getElementById('s-goal-omzet').value = instellingen.goalOmzet||150000;
   document.getElementById('s-goal-plaatsingen').value = instellingen.goalPlaatsingen||20;
+}
+
+function downloadBackup() {
+  const data = {
+    facturen: JSON.parse(localStorage.getItem('maseto_facturen')||'[]'),
+    klanten: JSON.parse(localStorage.getItem('maseto_klanten')||'[]'),
+    diensten: JSON.parse(localStorage.getItem('maseto_diensten')||'[]'),
+    instellingen: JSON.parse(localStorage.getItem('maseto_instellingen')||'{}'),
+    exportDatum: new Date().toISOString()
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], {type:'application/json'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const datum = new Date().toISOString().slice(0,10);
+  a.href = url; a.download = `maseto-backup-${datum}.json`;
+  a.click(); URL.revokeObjectURL(url);
+  toast('✅ Backup opgeslagen als maseto-backup-' + datum + '.json');
+}
+
+function herstelBackup(event) {
+  const file = event.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = JSON.parse(e.target.result);
+      if(data.facturen) localStorage.setItem('maseto_facturen', JSON.stringify(data.facturen));
+      if(data.klanten) localStorage.setItem('maseto_klanten', JSON.stringify(data.klanten));
+      if(data.diensten) localStorage.setItem('maseto_diensten', JSON.stringify(data.diensten));
+      if(data.instellingen) localStorage.setItem('maseto_instellingen', JSON.stringify(data.instellingen));
+      toast('✅ Backup hersteld! Pagina wordt herladen...');
+      setTimeout(function(){ location.reload(); }, 1500);
+    } catch(err) {
+      toast('❌ Ongeldig backup bestand');
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
 }
 
 function slaInstellingenOp() {

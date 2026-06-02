@@ -245,11 +245,11 @@ tbody tr:hover td { background: var(--surface2); }
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect></svg>
       Dashboard
     </div>
-    <div class="nav-item" onclick="showPage('nieuwe-factuur')">
+    <div class="nav-item active" onclick="showPage('nieuwe-factuur')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
       Nieuwe factuur
     </div>
-    <div class="nav-item active" onclick="showPage('facturen')">
+    <div class="nav-item" onclick="showPage('facturen')">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
       Facturen
     </div>
@@ -323,7 +323,7 @@ tbody tr:hover td { background: var(--surface2); }
     <div class="metric metric-link" onclick="showPage('ytd-overzicht')" title="Klik voor details">
       <div class="metric-label">Omzet YTD <span class="metric-arrow">→</span></div>
       <div class="metric-value green">€&nbsp;103.610,92</div>
-      <div class="metric-sub">49% van jaardoel</div>
+      <div class="metric-sub">45% van jaardoel</div>
     </div>
     <div class="metric metric-link" onclick="showPage('overdue')" title="Klik voor details">
       <div class="metric-label">Openstaand <span class="metric-arrow">→</span></div>
@@ -345,7 +345,7 @@ tbody tr:hover td { background: var(--surface2); }
             <button class="btn sm active" id="btn-all" onclick="toggleChart('all')">Heel jaar</button>
           </div>
         </div>
-        <div id="omzetChart-wrap" style="position:relative;height:220px"><canvas id="omzetChart" width="828" height="275" style="display: block; box-sizing: border-box; height: 220px; width: 662px;"></canvas></div>
+        <div id="omzetChart-wrap" style="position:relative;height:220px"><canvas id="omzetChart" width="1324" height="440" style="display: block; box-sizing: border-box; height: 220px; width: 662px;"></canvas></div>
         <div style="display:flex;gap:14px;margin-top:6px;font-size:12px;color:var(--text-muted)">
           <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:#1D9E75;display:inline-block"></span>Gefactureerd</span>
           <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:#9FE1CB;display:inline-block"></span>Verwacht (forecast)</span>
@@ -367,12 +367,12 @@ tbody tr:hover td { background: var(--surface2); }
             <line x1="150" y1="20" x2="150" y2="4" stroke="#1D9E75" stroke-width="2"></line>
             <polygon points="150,4 166,9 150,14" fill="#1D9E75"></polygon>
             <rect x="168" y="2" width="98" height="18" rx="4" fill="#1D9E75"></rect>
-            <text id="berg-goal-label" x="217" y="14" text-anchor="middle" font-family="sans-serif" font-size="9" font-weight="600" fill="white">€&nbsp;210.000 doel</text>
+            <text id="berg-goal-label" x="217" y="14" text-anchor="middle" font-family="sans-serif" font-size="9" font-weight="600" fill="white">€&nbsp;230.000 doel</text>
             <path d="M 128,234 C 124,212 118,190 122,168 C 126,148 130,128 138,108 C 142,94 146,64 150,28" fill="none" stroke="white" stroke-width="1" stroke-dasharray="4,3" opacity="0.4"></path>
             <text x="14" y="178" text-anchor="end" font-family="sans-serif" font-size="8" fill="#888780">25%</text>
             <text x="14" y="143" text-anchor="end" font-family="sans-serif" font-size="8" fill="#888780">50%</text>
             <text x="14" y="108" text-anchor="end" font-family="sans-serif" font-size="8" fill="#888780">75%</text>
-            <g id="berg-klimmer" transform="translate(129.28,122.16)">
+            <g id="berg-klimmer" transform="translate(126.4,130.79999999999998)">
               <circle cx="0" cy="-14" r="4" fill="#1a1a18"></circle>
               <path d="M -4,-18 Q 0,-22 4,-18" fill="#1D9E75" stroke="none"></path>
               <rect x="-2.5" y="-10" width="5" height="7" rx="1.5" fill="#378ADD"></rect>
@@ -385,22 +385,22 @@ tbody tr:hover td { background: var(--surface2); }
               <rect x="-4" y="2" width="3" height="2" rx="1" fill="#444441"></rect>
               <rect x="1" y="2" width="3" height="2" rx="1" fill="#444441"></rect>
             </g>
-            <g id="berg-bubble" transform="translate(103.28,92.16)">
+            <g id="berg-bubble" transform="translate(100.4,100.79999999999998)">
               <rect id="berg-bubble-bg" x="0" y="0" width="52" height="16" rx="8" fill="#A32D2D"></rect>
-              <text id="berg-bubble-text" x="26" y="11" text-anchor="middle" font-family="sans-serif" font-size="9" font-weight="600" fill="white">49%</text>
+              <text id="berg-bubble-text" x="26" y="11" text-anchor="middle" font-family="sans-serif" font-size="9" font-weight="600" fill="white">45%</text>
             </g>
           </svg>
           <div id="db-progress" style="margin-top:0.75rem">
     <div>
-      <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:5px"><span>Jaaromzet</span><span style="color:var(--text-muted)">€&nbsp;103.610,92 / €&nbsp;210.000,00</span></div>
-      <div class="progress-bg"><div class="progress-fill warn" style="width:49%"></div></div>
-      <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-hint);margin-top:3px"><span>49% behaald</span><span>€&nbsp;106.389,08 resterend</span></div>
+      <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:5px"><span>Jaaromzet</span><span style="color:var(--text-muted)">€&nbsp;103.610,92 / €&nbsp;230.000,00</span></div>
+      <div class="progress-bg"><div class="progress-fill warn" style="width:45%"></div></div>
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-hint);margin-top:3px"><span>45% behaald</span><span>€&nbsp;126.389,08 resterend</span></div>
     </div>
   </div>
         </div>
         <div class="card">
           <div class="card-title">Omzet per dienst</div>
-          <div id="dienstChart-wrap" style="position:relative;height:140px"><canvas id="dienstChart" width="388" height="175" style="display: block; box-sizing: border-box; height: 140px; width: 310px;"></canvas></div>
+          <div id="dienstChart-wrap" style="position:relative;height:140px"><canvas id="dienstChart" width="620" height="280" style="display: block; box-sizing: border-box; height: 140px; width: 310px;"></canvas></div>
         </div>
       </div>
     </div>
@@ -553,7 +553,7 @@ tbody tr:hover td { background: var(--surface2); }
 </div>
 
 <!-- FACTUREN OVERZICHT -->
-<div class="page active" id="page-facturen">
+<div class="page" id="page-facturen">
   <div class="topbar no-print">
     <button class="hamburger" onclick="toggleSidebar()" aria-label="Menu">
       <span></span><span></span><span></span>
@@ -1126,7 +1126,7 @@ tbody tr:hover td { background: var(--surface2); }
 </div>
 
 <!-- NIEUWE FACTUUR -->
-<div class="page" id="page-nieuwe-factuur">
+<div class="page active" id="page-nieuwe-factuur">
   <div class="topbar no-print">
     <button class="hamburger" onclick="toggleSidebar()" aria-label="Menu"><span></span><span></span><span></span></button>
     <div style="display:flex;align-items:center;gap:10px">
@@ -1161,10 +1161,14 @@ tbody tr:hover td { background: var(--surface2); }
           <div style="font-size:11px;color:var(--text-hint);margin-top:3px">Volgend: <span id="f-nr-preview" style="font-weight:500;color:var(--text-muted)">26-2519</span></div>
         </div>
 
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
           <div class="form-group">
             <label>Factuurdatum</label>
             <input type="date" id="f-datum">
+          </div>
+          <div class="form-group">
+            <label>Betalingstermijn (dagen)</label>
+            <input type="number" id="f-termijn" value="14" min="0" style="width:100%">
           </div>
           <div class="form-group">
             <label>Document type</label>
@@ -1400,7 +1404,7 @@ tbody tr:hover td { background: var(--surface2); }
       <td>Crediteuren administratie</td>
       <td>Nijkerk</td>
       <td style="color:var(--green-dark)">invoice.dde@damen.com</td>
-      <td>21</td>
+      <td>22</td>
       <td><div style="display:flex;gap:6px">
         <button class="btn sm primary" onclick="nieuweFactuurVoorKlant('mpwb3ompmwt1g')">+ Factuur</button>
         <button class="btn sm" onclick="factuurOverzichtVoorKlant('Damen Dredging Equipment')">Facturen</button>
@@ -1412,7 +1416,7 @@ tbody tr:hover td { background: var(--surface2); }
       <td>Crediteuren administratie</td>
       <td>Zeewolde</td>
       <td style="color:var(--green-dark)">APInvoices-EMEA@crce.com</td>
-      <td>4</td>
+      <td>5</td>
       <td><div style="display:flex;gap:6px">
         <button class="btn sm primary" onclick="nieuweFactuurVoorKlant('mpwfvtw2aho62')">+ Factuur</button>
         <button class="btn sm" onclick="factuurOverzichtVoorKlant('CRC-Evans BV')">Facturen</button>
@@ -1484,7 +1488,7 @@ tbody tr:hover td { background: var(--surface2); }
       <td>Crediteuren administratie</td>
       <td>Houten </td>
       <td style="color:var(--green-dark)">facturen@inventum.com</td>
-      <td>0</td>
+      <td>1</td>
       <td><div style="display:flex;gap:6px">
         <button class="btn sm primary" onclick="nieuweFactuurVoorKlant('mpwpkwyqw6gjp')">+ Factuur</button>
         <button class="btn sm" onclick="factuurOverzichtVoorKlant('Inventum Technologies')">Facturen</button>
@@ -1636,12 +1640,12 @@ ASML B.V.,Jan de Vries,Eindhoven..." style="width:100%;padding:9px 12px;border:1
       <div class="form-group"><label>BTW-nummer</label><input type="text" id="s-btw" value="NL821055288B01"></div>
       <div class="form-group"><label>KvK-nummer</label><input type="text" id="s-kvk" value="32156365"></div>
       <div class="form-group"><label>IBAN</label><input type="text" id="s-iban" value="NL15RABO0149588917"></div>
-      <div style="background:#f0faf6;border:2px solid #1D9E75;border-radius:10px;padding:1rem 1.2rem;margin:1rem 0">
+      <div style="background:#e8f7f1;border:2px solid #1D9E75;border-radius:10px;padding:1rem 1.2rem;margin:1rem 0">
         <div style="font-weight:600;font-size:14px;margin-bottom:4px;color:#1D9E75">💾 Data backup</div>
-        <div style="font-size:12.5px;color:var(--text-muted);margin-bottom:1rem">Sla alle facturen, klanten en producten op als bestand. Herstel bij een nieuwe app versie.</div>
+        <div style="font-size:12.5px;color:#666;margin-bottom:1rem">Sla alle facturen, klanten en producten op als bestand. Herstel bij een nieuwe app versie.</div>
         <div style="display:flex;gap:10px;flex-wrap:wrap">
           <button class="btn primary" onclick="downloadBackup()" style="flex:1;min-width:140px;font-size:13px">💾 Download backup</button>
-          <button class="btn" onclick="document.getElementById('backup-file-input').click()" style="flex:1;min-width:140px;font-size:13px">📂 Herstel backup</button>
+          <button class="btn" onclick="document.getElementById('backup-file-input').click()" style="flex:1;min-width:140px;font-size:13px;border:1px solid #ccc">📂 Herstel backup</button>
           <input type="file" id="backup-file-input" accept=".json" style="display:none" onchange="herstelBackup(event)">
         </div>
       </div>
@@ -2589,18 +2593,6 @@ function bouwFactuurHTML(f, inst) {
   '</div>';
 }
 
-
-function downloadPDF() {
-  const f = getFactuurData();
-  const html = `<!DOCTYPE html><html lang="nl"><head><meta charset="UTF-8"><title>Factuur ${f.nummer} - ${instellingen.naam}</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <style>body{margin:2.5cm 2cm;font-family:'DM Sans',Arial,sans-serif;-webkit-print-color-adjust:exact;print-color-adjust:exact}@media print{body{margin:1.5cm}}</style>
-  </head><body>${bouwFactuurHTML(f, instellingen)}<script>window.onload=function(){window.print();}<\/script></body></html>`;
-  const w = window.open('', '_blank');
-  if(w) { w.document.write(html); w.document.close(); }
-  else { toast('Sta popups toe voor deze site om PDF te openen'); }
-}
 
 function stuurEmail() {
   const f = getFactuurData();

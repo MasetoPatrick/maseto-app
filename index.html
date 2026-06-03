@@ -1949,7 +1949,7 @@ ASML B.V.,Jan de Vries,Eindhoven..." style="width:100%;padding:9px 12px;border:1
   <div style="padding:2rem">
     <!-- Filters -->
     <div class="card" style="margin-bottom:1.5rem">
-      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px" class="resp-grid-1-1">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px" class="resp-grid-1-1">
         <div class="form-group" style="margin-bottom:0">
           <label>Klant</label>
           <select id="rapp-klant" onchange="renderRapportage()" style="width:100%;padding:8px 10px;border:1px solid var(--border-mid);border-radius:8px;background:var(--bg);color:var(--text);font-size:13px">
@@ -1962,6 +1962,11 @@ ASML B.V.,Jan de Vries,Eindhoven..." style="width:100%;padding:9px 12px;border:1
             <option value="">Alle types</option>
             <option value="Interim werkzaamheden">Interim werkzaamheden</option>
             <option value="Werving & selectie">Werving & selectie</option>
+          </select>
+        </div>
+        <div class="form-group" style="margin-bottom:0">
+          <label>Jaar</label>
+          <select id="rapp-jaar" onchange="renderRapportage()" style="width:100%;padding:8px 10px;border:1px solid var(--border-mid);border-radius:8px;background:var(--bg);color:var(--text);font-size:13px">
           </select>
         </div>
         <div class="form-group" style="margin-bottom:0">
@@ -2617,7 +2622,7 @@ function bouwFactuurHTML(f, inst) {
       '</div>' +
     '</div>' +
 
-    '<div style="font-size:24px;font-weight:600;color:#1D9E75;margin-bottom:1.5rem;letter-spacing:-0.5px">FACTUUR ' + (f.nummer||'') + '</div>' +
+    '<div style="font-size:24px;font-weight:600;color:#1D9E75;margin-bottom:1.5rem;letter-spacing:-0.5px;color:' + (f.doctype==='creditnota' ? '#1D9E75' : '#1D9E75') + '">' + (f.doctype==='creditnota' ? 'CREDITFACTUUR' : 'FACTUUR') + ' ' + (f.nummer||'') + '</div>' +
 
     '<div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-bottom:2rem">' +
       '<div>' +
@@ -2735,10 +2740,10 @@ function previewFactuur(id) {
 // --- DASHBOARD ---
 function renderDashboard() {
   const ytdFacturen = facturen.filter(f => f.datum && f.datum.startsWith(HJ+'') && f.status !== 'concept');
-  const ytdOmzet = ytdFacturen.reduce((a,f) => a+(f.grand||0), 0);
-  const huidigMaand = facturen.filter(f => f.datum && f.datum.startsWith(HJ+'-'+String(HM+1).padStart(2,'0')) && f.status!=='concept').reduce((a,f)=>a+(f.grand||0),0);
-  const ytdBetaald = ytdFacturen.filter(f=>f.status==='betaald').reduce((a,f)=>a+(f.grand||0),0);
-  const openstaand = facturen.filter(f=>f.status==='open'||isLaat(f)).reduce((a,f)=>a+(f.grand||0),0);
+  const ytdOmzet = ytdFacturen.reduce((a,f) => a+(f.subtotaal||0), 0);
+  const huidigMaand = facturen.filter(f => f.datum && f.datum.startsWith(HJ+'-'+String(HM+1).padStart(2,'0')) && f.status!=='concept').reduce((a,f)=>a+(f.subtotaal||0),0);
+  const ytdBetaald = ytdFacturen.filter(f=>f.status==='betaald').reduce((a,f)=>a+(f.subtotaal||0),0);
+  const openstaand = facturen.filter(f=>f.status==='open'||isLaat(f)).reduce((a,f)=>a+(f.subtotaal||0),0);
   const pct = Math.round(ytdOmzet / instellingen.goalOmzet * 100);
   const verwacht = HM > 0 ? Math.round(ytdOmzet / (HM+1) * 12) : 0;
 
@@ -2789,7 +2794,7 @@ function renderDashboard() {
 
   // Top klanten podium
   const klantOmzet = {};
-  ytdFacturen.forEach(f => { klantOmzet[f.klantNaam||'?'] = (klantOmzet[f.klantNaam||'?']||0) + (f.grand||0); });
+  ytdFacturen.forEach(f => { klantOmzet[f.klantNaam||'?'] = (klantOmzet[f.klantNaam||'?']||0) + (f.subtotaal||0); });
   const topK = Object.entries(klantOmzet).sort((a,b)=>b[1]-a[1]).slice(0,5);
   const podiumSvg = document.getElementById('podium-svg');
   const restDiv = document.getElementById('db-topklanten-rest');
@@ -2844,7 +2849,7 @@ function renderOmzetChart() {
   facturen.filter(f => f.datum?.startsWith(HJ+'') && f.status!=='concept').forEach(f => {
     const m = parseInt(f.datum.split('-')[1]) - 1;
     if(m >= 0 && m < 12) {
-      var bedrag = f.grand||0;
+      var bedrag = f.subtotaal||0;
       if(f.doctype === 'creditnota') bedrag = -Math.abs(bedrag);
       maandOmzet[m] += bedrag;
     }
@@ -2885,7 +2890,7 @@ function renderDienstChart() {
   const dienstOmzet = {'Werving & selectie':0,'Detachering':0,'Overige diensten':0};
   facturen.filter(f=>f.status!=='concept' && f.datum?.startsWith(HJ+'')).forEach(f => {
     const t = f.type||'Overige diensten';
-    dienstOmzet[t] = (dienstOmzet[t]||0) + (f.grand||0);
+    dienstOmzet[t] = (dienstOmzet[t]||0) + (f.subtotaal||0);
   });
   const labels = Object.keys(dienstOmzet).filter(k => dienstOmzet[k] > 0);
   const data = labels.map(k => dienstOmzet[k]);
@@ -3315,8 +3320,8 @@ function renderMaandFacturen() {
   const maandStr = String(maand+1).padStart(2,'0');
   const prefix = `${jaar}-${maandStr}`;
   const lijst = facturen.filter(f=>f.datum?.startsWith(prefix) && f.status!=='concept');
-  const totaal = lijst.reduce((a,f)=>a+(f.grand||0),0);
-  const betaald = lijst.filter(f=>f.status==='betaald').reduce((a,f)=>a+(f.grand||0),0);
+  const totaal = lijst.reduce((a,f)=>a+(f.subtotaal||0),0);
+  const betaald = lijst.filter(f=>f.status==='betaald').reduce((a,f)=>a+(f.subtotaal||0),0);
   document.getElementById('maand-title').textContent = `Facturen — ${MAANDEN[maand]} ${jaar}`;
   document.getElementById('maand-metrics').innerHTML = `
     <div class="metric"><div class="metric-label">Totaal gefactureerd</div><div class="metric-value green">${fmt(totaal)}</div><div class="metric-sub">${lijst.length} facturen</div></div>
@@ -3389,8 +3394,8 @@ function renderYTDOverzicht() {
     if(!f.datum) return;
     const j = f.datum.split('-')[0];
     const m = parseInt(f.datum.split('-')[1])-1;
-    if(j==HJ) huidigMaanden[m]+=(f.grand||0);
-    if(j==(HJ-1)) vorigMaanden[m]+=(f.grand||0);
+    if(j==HJ) huidigMaanden[m]+=(f.subtotaal||0);
+    if(j==(HJ-1)) vorigMaanden[m]+=(f.subtotaal||0);
   });
   if(vergelijkChartInst) vergelijkChartInst.destroy();
   vergelijkChartInst = new Chart(document.getElementById('vergelijkChart'), {
@@ -3411,7 +3416,7 @@ function renderYTDOverzicht() {
     const q = [0,0,0,0];
     facturen.filter(f=>f.datum?.startsWith(j)&&f.status!=='concept').forEach(f=>{
       const m = parseInt(f.datum.split('-')[1])-1;
-      q[Math.floor(m/3)]+=(f.grand||0);
+      q[Math.floor(m/3)]+=(f.subtotaal||0);
     });
     return {jaar:j, q};
   });
@@ -3435,8 +3440,8 @@ function renderOverdue() {
   const alle = facturen.filter(f=>f.status==='open'||isLaat(f));
   const laat = alle.filter(f=>isLaat(f));
   const openBinnen = alle.filter(f=>!isLaat(f));
-  const totaalLaat = laat.reduce((a,f)=>a+(f.grand||0),0);
-  const totaalOpen = openBinnen.reduce((a,f)=>a+(f.grand||0),0);
+  const totaalLaat = laat.reduce((a,f)=>a+(f.subtotaal||0),0);
+  const totaalOpen = openBinnen.reduce((a,f)=>a+(f.subtotaal||0),0);
   const oudste = laat.sort((a,b)=>a.verval?.localeCompare(b.verval))[0];
   const maxDagen = oudste ? Math.round((new Date()-new Date(oudste.verval))/86400000) : 0;
 
@@ -4165,17 +4170,30 @@ function initRapportage() {
     if(n === huidig) opt.selected = true;
     sel.appendChild(opt);
   });
+  // Fill year selector
+  var jaarSel = document.getElementById('rapp-jaar');
+  if(jaarSel) {
+    var huidigjaar = jaarSel.value;
+    var jaren = [...new Set(facturen.map(function(f){ return f.datum ? f.datum.split('-')[0] : null; }).filter(Boolean))].sort().reverse();
+    if(jaren.length === 0) jaren = [new Date().getFullYear().toString()];
+    jaarSel.innerHTML = jaren.map(function(j) {
+      return '<option value="' + j + '"' + (j === huidigjaar ? ' selected' : '') + '>' + j + '</option>';
+    }).join('');
+    if(!huidigjaar) jaarSel.value = jaren[0];
+  }
 }
 
 function getRapportageFacturen() {
   var klant = document.getElementById('rapp-klant').value;
   var type = document.getElementById('rapp-type').value;
   var periode = document.getElementById('rapp-periode').value;
+  var jaar = document.getElementById('rapp-jaar') ? document.getElementById('rapp-jaar').value : '';
 
   return facturen.filter(function(f) {
     if(f.status === 'concept') return false;
     if(klant && f.klantNaam !== klant) return false;
     if(type && f.type !== type) return false;
+    if(jaar && f.datum && !f.datum.startsWith(jaar)) return false;
     if(periode !== 'jaar') {
       var m = f.datum ? parseInt(f.datum.split('-')[1]) - 1 : -1;
       var q = Math.floor(m / 3) + 1;
@@ -4823,10 +4841,25 @@ function onDocTypeChange() {
       var preview = document.getElementById('f-nr-preview');
       if(preview) preview.textContent = nrEl.value;
     }
+    // Clear notitie for creditnota
+    var notitieEl = document.getElementById('f-notities');
+    if(notitieEl) notitieEl.value = '';
+    // Make all regel prices negative
+    setTimeout(function() {
+      var prijsVelden = document.querySelectorAll('.regel-prijs');
+      prijsVelden.forEach(function(el) {
+        var v = parseFloat(el.value);
+        if(!isNaN(v) && v > 0) el.value = -v;
+      });
+      berekenTotalen();
+    }, 100);
   } else {
     if(badge) badge.style.background = '';
     var nrEl2 = document.getElementById('f-nummer');
     if(nrEl2 && nrEl2.value.startsWith('CN-')) nrEl2.value = '';
+    // Restore notitie
+    var notitieEl2 = document.getElementById('f-notities');
+    if(notitieEl2 && !notitieEl2.value) updateNotitie();
   }
 }
 

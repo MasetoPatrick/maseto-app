@@ -1659,6 +1659,21 @@ ASML B.V.,Jan de Vries,Eindhoven..." style="width:100%;padding:9px 12px;border:1
       </div>
       <div id="test-log" style="background:var(--surface2);border-radius:8px;padding:1rem;max-height:300px;overflow-y:auto;font-family:monospace"></div>
     </div>
+    <div class="card" style="margin-bottom:1rem">
+      <div class="card-title">💾 Data backup</div>
+      <div style="font-size:13px;color:var(--text-muted);margin-bottom:1rem">Sla alle facturen, klanten en instellingen op als bestand. Herstel bij een nieuwe app versie of na een herinstallatie.</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn primary" onclick="downloadBackup()" style="flex:1;min-width:140px;font-size:13px">💾 Download backup</button>
+        <button class="btn" onclick="downloadApp()" style="flex:1;min-width:140px;font-size:13px">⬇ Download app</button>
+        <button class="btn" onclick="document.getElementById('backup-file-input').click()" style="flex:1;min-width:140px;font-size:13px;border:1px solid var(--border-mid)">📂 Herstel backup</button>
+        <input type="file" id="backup-file-input" accept=".json" style="display:none" onchange="herstelBackup(event)">
+      </div>
+    </div>
+    <div style="text-align:center;padding:1.5rem 0 0.5rem;font-size:11px;color:var(--text-hint);line-height:1.8">
+      © 2024–2026 Maseto BV · Alle rechten voorbehouden<br>
+      Dit programma is exclusief ontwikkeld voor intern gebruik door Maseto BV.<br>
+      Ongeautoriseerd gebruik, kopiëren of verspreiden is niet toegestaan.
+    </div>
   </div>
 </div>
 
@@ -1684,24 +1699,6 @@ ASML B.V.,Jan de Vries,Eindhoven..." style="width:100%;padding:9px 12px;border:1
         </table>
       </div>
     </div>
-    <div class="card" style="margin-bottom:1rem">
-      <div class="card-title">💾 Data backup</div>
-      <div style="font-size:13px;color:var(--text-muted);margin-bottom:1rem">Sla alle facturen, klanten en instellingen op als bestand. Herstel bij een nieuwe app versie of na een herinstallatie.</div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap">
-        <button class="btn primary" onclick="downloadBackup()" style="flex:1;min-width:140px;font-size:13px">💾 Download backup</button>
-        <button class="btn" onclick="downloadApp()" style="flex:1;min-width:140px;font-size:13px">⬇ Download app</button>
-        <button class="btn" onclick="document.getElementById('backup-file-input').click()" style="flex:1;min-width:140px;font-size:13px;border:1px solid var(--border-mid)">📂 Herstel backup</button>
-        <input type="file" id="backup-file-input" accept=".json" style="display:none" onchange="herstelBackup(event)">
-      </div>
-    </div>
-    <div style="text-align:center;padding:1.5rem 0 0.5rem;font-size:11px;color:var(--text-hint);line-height:1.8">
-      © 2024–2026 Maseto BV · Alle rechten voorbehouden<br>
-      Dit programma is exclusief ontwikkeld voor intern gebruik door Maseto BV.<br>
-      Ongeautoriseerd gebruik, kopiëren of verspreiden is niet toegestaan.
-    </div>
-  </div>
-</div>
-
 <!-- YTD OVERZICHT -->
 <div class="page" id="page-ytd-overzicht">
   <div class="topbar no-print">

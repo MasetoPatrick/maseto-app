@@ -2224,6 +2224,7 @@ function showPage(id) {
   document.getElementById('page-'+id).classList.add('active');
   document.querySelectorAll('.nav-item').forEach(n => { if(n.getAttribute('onclick')?.includes(id)) n.classList.add('active'); });
   if(id === 'dashboard') renderDashboard();
+  if(id === 'prognose') { renderPrognose(); }
   if(id === 'facturen') renderFactuurTabel();
   if(id === 'klanten') renderKlantTabel();
   if(id === 'producten') renderDienstTabel();
@@ -4941,3 +4942,4 @@ renderDashboard();
 
 
 HTMLEOF</body></html>
+  

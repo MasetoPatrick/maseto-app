@@ -2,7 +2,8 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Maseto — Factuurprogramma</title>
-<link rel="preconnect" href="https://fonts.googleapis.com/">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+CiAgPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iNiIgZmlsbD0iIzFEOUU3NSIvPgogIDx0ZXh0IHg9IjE2IiB5PSIyMyIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXdlaWdodD0iYm9sZCIgZm9udC1zaXplPSIyMCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPk08L3RleHQ+Cjwvc3ZnPg==">
+  <link rel="preconnect" href="https://fonts.googleapis.com/">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&amp;family=DM+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -16,7 +17,7 @@
   --amber: #BA7517;
   --amber-light: #FAEEDA;
   --red: #A32D2D;
-  --red-light: #FCEBEB;
+  --red-light: #FCEBEB;a
   --text: #1a1a18;
   --text-muted: #6b6b67;
   --text-hint: #9e9e99;
@@ -1887,24 +1888,14 @@ ASML B.V.,Jan de Vries,Eindhoven..." style="width:100%;padding:9px 12px;border:1
     <div id="prog-interim-velden" style="display:none">
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
         <div class="form-group"><label>Marge per maand (€)</label><input type="number" id="prog-marge-maand" placeholder="0" step="100"></div>
-        <div class="form-group"><label>Aantal maanden</label><input type="number" id="prog-maanden" placeholder="12" value="12" min="1"></div>
+        <div class="form-group"><label>Aantal maanden <span style="font-size:10px;color:var(--text-hint)" id="prog-maanden-label"></span></label><input type="number" id="prog-maanden" placeholder="0" readonly style="background:var(--surface2)"></div>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-        <div class="form-group"><label>Startmaand</label>
-          <select id="prog-startmaand" style="width:100%;padding:8px 10px;border:1px solid var(--border-mid);border-radius:8px;background:var(--bg);color:var(--text);font-size:13px">
-            <option value="0">Januari</option><option value="1">Februari</option><option value="2">Maart</option>
-            <option value="3">April</option><option value="4">Mei</option><option value="5">Juni</option>
-            <option value="6">Juli</option><option value="7">Augustus</option><option value="8">September</option>
-            <option value="9">Oktober</option><option value="10">November</option><option value="11">December</option>
-          </select>
+        <div class="form-group"><label>Startdatum</label>
+          <input type="month" id="prog-startmaand" onchange="berekenProgMaanden()" style="width:100%;padding:8px 10px;border:1px solid var(--border-mid);border-radius:8px;background:var(--bg);color:var(--text);font-size:13px">
         </div>
-        <div class="form-group"><label>Eindmaand</label>
-          <select id="prog-eindmaand" style="width:100%;padding:8px 10px;border:1px solid var(--border-mid);border-radius:8px;background:var(--bg);color:var(--text);font-size:13px">
-            <option value="0">Januari</option><option value="1">Februari</option><option value="2">Maart</option>
-            <option value="3">April</option><option value="4">Mei</option><option value="5">Juni</option>
-            <option value="6">Juli</option><option value="7">Augustus</option><option value="8">September</option>
-            <option value="9">Oktober</option><option value="10">November</option><option value="11">December</option>
-          </select>
+        <div class="form-group"><label>Einddatum</label>
+          <input type="month" id="prog-eindmaand" onchange="berekenProgMaanden()" style="width:100%;padding:8px 10px;border:1px solid var(--border-mid);border-radius:8px;background:var(--bg);color:var(--text);font-size:13px">
         </div>
       </div>
     </div>
@@ -3735,12 +3726,26 @@ function berekenOmzetPerMaand() {
         }
       });
     } else if(type === 'interim') {
-      var start = parseInt(p.startmaand) || 0;
-      var eind = parseInt(p.eindmaand);
-      if(isNaN(eind)) eind = 11;
+      // Support multi-year: startmaand is now 'YYYY-MM' string or legacy 0-11 number
       var marge = parseFloat(p.margePerMaand) || 0;
-      for(var m = start; m <= eind && m < 12; m++) {
-        omzet[m] += marge;
+      var huidigJaar = new Date().getFullYear().toString();
+      var startStr = p.startmaand;
+      var eindStr = p.eindmaand;
+      // Legacy: if stored as number 0-11, convert to current year
+      if(!isNaN(parseInt(startStr)) && parseInt(startStr) < 12) {
+        startStr = huidigJaar + '-' + String(parseInt(startStr)+1).padStart(2,'0');
+      }
+      if(!isNaN(parseInt(eindStr)) && parseInt(eindStr) < 12) {
+        eindStr = huidigJaar + '-' + String(parseInt(eindStr)+1).padStart(2,'0');
+      }
+      var s = new Date((startStr||huidigJaar+'-01') + '-01');
+      var e = new Date((eindStr||huidigJaar+'-12') + '-01');
+      // Only count months in current forecast year
+      var forecastJaar = parseInt(huidigJaar);
+      for(var d = new Date(s); d <= e; d.setMonth(d.getMonth()+1)) {
+        if(d.getFullYear() === forecastJaar) {
+          omzet[d.getMonth()] += marge;
+        }
       }
     } else if(type === 'overig') {
       var m = parseInt(p.overigMaand) || 0;
@@ -3884,11 +3889,19 @@ function renderProgPlaatsingenLijst() {
         return '<div style="font-size:11px;color:var(--text-muted);margin-top:2px">' + (d.datum || '—') + ': ' + fmt(parseFloat(d.bedrag)||0) + '</div>';
       }).join('');
     } else if(type === 'interim') {
-      var start = parseInt(p.startmaand)||0;
-      var eind = parseInt(p.eindmaand); if(isNaN(eind)) eind = 11;
+      var startStr = p.startmaand || '';
+      var eindStr = p.eindmaand || '';
       var marge = parseFloat(p.margePerMaand)||0;
-      totaal = marge * (eind - start + 1);
-      detail = '<div style="font-size:11px;color:var(--text-muted);margin-top:2px">' + fmt(marge) + '/mnd · ' + mnd[start] + ' — ' + mnd[eind] + '</div>';
+      // Calculate total months
+      var totMaanden = 0;
+      if(startStr && eindStr) {
+        var s = new Date(startStr + '-01');
+        var e = new Date(eindStr + '-01');
+        totMaanden = (e.getFullYear() - s.getFullYear()) * 12 + (e.getMonth() - s.getMonth()) + 1;
+        if(totMaanden < 1) totMaanden = 1;
+      }
+      totaal = marge * totMaanden;
+      detail = '<div style="font-size:11px;color:var(--text-muted);margin-top:2px">' + fmt(marge) + '/mnd · ' + (startStr||'?') + ' — ' + (eindStr||'?') + ' (' + totMaanden + ' mnd)</div>';
     } else {
       totaal = parseFloat(p.overigBedrag)||0;
       detail = '<div style="font-size:11px;color:var(--text-muted);margin-top:2px">' + mnd[parseInt(p.overigMaand)||0] + '</div>';
@@ -3947,15 +3960,28 @@ function openProgModal(type, id) {
     }
   } else if(t === 'interim') {
     document.getElementById('prog-marge-maand').value = p ? (p.margePerMaand||'') : '';
-    document.getElementById('prog-maanden').value = p ? ((parseInt(p.eindmaand)||11) - (parseInt(p.startmaand)||0) + 1) : 12;
-    document.getElementById('prog-startmaand').value = p ? (p.startmaand||0) : 0;
-    document.getElementById('prog-eindmaand').value = p ? (p.eindmaand||11) : 11;
+    document.getElementById('prog-startmaand').value = p ? (p.startmaand||'') : '';
+    document.getElementById('prog-eindmaand').value = p ? (p.eindmaand||'') : '';
+    berekenProgMaanden();
   } else {
     document.getElementById('prog-overig-bedrag').value = p ? (p.overigBedrag||'') : '';
     document.getElementById('prog-overig-maand').value = p ? (p.overigMaand||0) : 0;
   }
 
   openModal('modal-prog');
+}
+
+function berekenProgMaanden() {
+  var start = document.getElementById('prog-startmaand').value;
+  var eind = document.getElementById('prog-eindmaand').value;
+  if(start && eind) {
+    var s = new Date(start + '-01');
+    var e = new Date(eind + '-01');
+    var maanden = (e.getFullYear() - s.getFullYear()) * 12 + (e.getMonth() - s.getMonth()) + 1;
+    if(maanden < 1) maanden = 1;
+    document.getElementById('prog-maanden').value = maanden;
+    document.getElementById('prog-maanden-label').textContent = '(' + maanden + ')';
+  }
 }
 
 function berekenProgFee() {
@@ -4030,8 +4056,8 @@ function slaProgOp() {
     });
   } else if(t === 'interim') {
     p.margePerMaand = parseFloat(document.getElementById('prog-marge-maand').value)||0;
-    p.startmaand = parseInt(document.getElementById('prog-startmaand').value)||0;
-    p.eindmaand = parseInt(document.getElementById('prog-eindmaand').value)||11;
+    p.startmaand = document.getElementById('prog-startmaand').value || '';
+    p.eindmaand = document.getElementById('prog-eindmaand').value || '';
   } else {
     p.overigBedrag = parseFloat(document.getElementById('prog-overig-bedrag').value)||0;
     p.overigMaand = parseInt(document.getElementById('prog-overig-maand').value)||0;

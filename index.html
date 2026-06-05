@@ -4,6 +4,8 @@
 <title>Maseto — Factuurprogramma</title>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAzMiAzMiI+CiAgPHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iNiIgZmlsbD0iIzFEOUU3NSIvPgogIDx0ZXh0IHg9IjE2IiB5PSIyMyIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXdlaWdodD0iYm9sZCIgZm9udC1zaXplPSIyMCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPk08L3RleHQ+Cjwvc3ZnPg==">
   <link rel="preconnect" href="https://fonts.googleapis.com/">
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script>emailjs.init('U3TTsngijjOLPbDSE');</script>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&amp;family=DM+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
@@ -1926,6 +1928,39 @@ ASML B.V.,Jan de Vries,Eindhoven..." style="width:100%;padding:9px 12px;border:1
   </div>
 </div>
 
+<!-- MAIL MODAL -->
+<div class="modal-overlay" id="modal-mail">
+  <div class="modal" style="max-width:580px">
+    <div class="modal-header">
+      <span class="modal-title" id="mail-modal-title">Factuur versturen</span>
+      <button class="modal-close" onclick="closeModal('modal-mail')">x</button>
+    </div>
+    <div class="form-group">
+      <label>Aan</label>
+      <input type="email" id="mail-aan" placeholder="klant@bedrijf.nl" style="width:100%">
+    </div>
+    <div class="form-group">
+      <label>CC</label>
+      <input type="text" id="mail-cc" value="patrick@maseto.nl, hulst.maseto@mailtobasecone.com" style="width:100%">
+    </div>
+    <div class="form-group">
+      <label>Onderwerp</label>
+      <input type="text" id="mail-onderwerp" style="width:100%">
+    </div>
+    <div class="form-group">
+      <label>Bericht</label>
+      <textarea id="mail-bericht" rows="8" style="width:100%;padding:8px 10px;border:1px solid var(--border-mid);border-radius:8px;background:var(--bg);color:var(--text);font-size:13px;font-family:inherit;resize:vertical"></textarea>
+    </div>
+    <div style="background:var(--surface2);border-radius:8px;padding:10px 12px;font-size:12px;color:var(--text-muted);margin-bottom:1rem">
+      📎 De PDF wordt automatisch gedownload — voeg hem bij in je mailprogramma.
+    </div>
+    <div style="display:flex;gap:10px">
+      <button class="btn primary" onclick="verstuurMail()">✉ Verstuur</button>
+      <button class="btn" onclick="closeModal('modal-mail')">Annuleren</button>
+    </div>
+  </div>
+</div>
+
 <!-- KOSTEN MODAL -->
 <div class="modal-overlay" id="modal-kosten">
   <div class="modal" style="max-width:500px">
@@ -2026,8 +2061,8 @@ ASML B.V.,Jan de Vries,Eindhoven..." style="width:100%;padding:9px 12px;border:1
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
         Verstuur naar klant
       </button>
-      <button class="btn sm primary" onclick="slaFactuurOp('open')">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline></svg>
+      <button class="btn sm primary" onclick="slaEnVerstuur()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
         Opslaan &amp; verstuur
       </button>
     </div>
@@ -4343,6 +4378,61 @@ function renderRapportage() {
   }).join('');
 }
 
+
+function slaEnVerstuur() {
+  slaFactuurOp('open');
+  setTimeout(function() { stuurEmail(); }, 300);
+}
+
+// ============================================================
+// MAIL VERSTUREN VIA EMAILJS
+// ============================================================
+
+function stuurEmail() {
+  var f = window._previewFactuur || getFactuurData();
+  if(!f) { toast('Geen factuur gevonden', 'error'); return; }
+
+  var isCreditnota = f.doctype === 'creditnota';
+  var onderwerp = (isCreditnota ? 'Creditfactuur ' : 'Factuur ') + (f.nummer||'') + ' - Maseto BV';
+  var klantNaam = f.klantNaam || 'relatie';
+  var termijn = f.termijn || 30;
+  var datum = fmtDatum(f.datum);
+  var bedrag = fmt(f.subtotaal||0);
+
+  var bericht = isCreditnota
+    ? 'Hoi ' + klantNaam + ',\n\nBijgaand ontvang je creditfactuur ' + (f.nummer||'') + ' van ' + datum + ' voor ' + bedrag + ' excl. BTW.\n\nDit bedrag verrekenen we met openstaande of toekomstige facturen.\n\nGroet,\nPatrick\nMaseto BV'
+    : 'Hoi ' + klantNaam + ',\n\nBijgaand ontvang je factuur ' + (f.nummer||'') + ' van ' + datum + ' voor ' + bedrag + ' excl. BTW.\n\nBetaling graag binnen ' + termijn + ' dagen op:\nIBAN: NL15 RABO 0149 5889 17\nOnder vermelding van ' + (f.nummer||'') + '.\n\nGroet,\nPatrick\nMaseto BV';
+
+  // Fill modal
+  document.getElementById('mail-aan').value = f.klantEmail || '';
+  document.getElementById('mail-onderwerp').value = onderwerp;
+  document.getElementById('mail-bericht').value = bericht;
+  document.getElementById('mail-modal-title').textContent = isCreditnota ? 'Creditfactuur versturen' : 'Factuur versturen';
+
+  openModal('modal-mail');
+}
+
+function verstuurMail() {
+  var aan = document.getElementById('mail-aan').value.trim();
+  var cc = document.getElementById('mail-cc').value.trim();
+  var onderwerp = document.getElementById('mail-onderwerp').value.trim();
+  var bericht = document.getElementById('mail-bericht').value.trim();
+
+  if(!aan) { toast('Vul een e-mailadres in', 'error'); return; }
+
+  // First download the PDF
+  downloadPDF();
+
+  // Then open mailto
+  var mailto = 'mailto:' + aan
+    + '?cc=' + encodeURIComponent(cc)
+    + '&subject=' + encodeURIComponent(onderwerp)
+    + '&body=' + encodeURIComponent(bericht);
+
+  window.location.href = mailto;
+  closeModal('modal-mail');
+  toast('📎 PDF is gedownload — voeg hem bij in je mailprogramma');
+}
 
 // ============================================================
 // POSTCODE LOOKUP MET LOKALE CACHE

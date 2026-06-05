@@ -291,9 +291,9 @@ tbody tr:hover td { background: var(--surface2); }
   <div class="sidebar-bottom">
     <div class="sidebar-iban">NL15 RABO 0149 5889 17</div>
     <div id="sync-status" style="font-size: 11px; margin-bottom: 6px; cursor: pointer;" onclick="syncNaarBackend()" title="Sync naar Google Sheets">⟳ Sync</div>
-    <button onclick="downloadApp()" style="margin-top:10px;width:100%;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.7);font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;font-family:inherit">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-      Download app
+    <button onclick="showPage('instellingen')" style="margin-top:10px;width:100%;padding:8px;border-radius:8px;border:1px solid rgba(255,255,255,0.2);background:rgba(255,255,255,0.08);color:rgba(255,255,255,0.7);font-size:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px;font-family:inherit">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width:13px;height:13px"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+      Instellingen
     </button>
   </div>
 </aside>
@@ -1178,9 +1178,10 @@ tbody tr:hover td { background: var(--surface2); }
             </select>
           </div>
           <div id="f-ws-pct-velden" style="display: block;">
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
-              <div class="form-group"><label>Jaarsalaris (€)</label><input type="number" id="f-jaarsalaris" placeholder="0" step="500" oninput="berekenWSFee()"></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
+              <div class="form-group"><label>Maandsalaris (€)</label><input type="number" id="f-maandsalaris" placeholder="0" step="100" oninput="berekenWSFee()"></div>
               <div class="form-group"><label>Fee %</label><input type="number" id="f-fee-pct" placeholder="20" value="20" step="0.5" oninput="berekenWSFee()"></div>
+              <div class="form-group"><label>Fee (€) <span style="font-size:10px;color:var(--text-hint)">incl. 8% vak.geld</span></label><input type="number" id="f-jaarsalaris" placeholder="0" step="100" oninput="berekenWSFeeHandmatig()" readonly style="background:var(--surface2)"></div>
             </div>
           </div>
           <div id="f-ws-fixed-velden" style="display: none;">
@@ -1610,15 +1611,7 @@ ASML B.V.,Jan de Vries,Eindhoven..." style="width:100%;padding:9px 12px;border:1
       <div class="form-group"><label>BTW-nummer</label><input type="text" id="s-btw" value="NL821055288B01"></div>
       <div class="form-group"><label>KvK-nummer</label><input type="text" id="s-kvk" value="32156365"></div>
       <div class="form-group"><label>IBAN</label><input type="text" id="s-iban" value="NL15RABO0149588917"></div>
-      <div style="background:#e8f7f1;border:2px solid #1D9E75;border-radius:10px;padding:1rem 1.2rem;margin:1rem 0">
-        <div style="font-weight:600;font-size:14px;margin-bottom:4px;color:#1D9E75">💾 Data backup</div>
-        <div style="font-size:12.5px;color:#666;margin-bottom:1rem">Sla alle facturen, klanten en producten op als bestand. Herstel bij een nieuwe app versie.</div>
-        <div style="display:flex;gap:10px;flex-wrap:wrap">
-          <button class="btn primary" onclick="downloadBackup()" style="flex:1;min-width:140px;font-size:13px">💾 Download backup</button>
-          <button class="btn" onclick="document.getElementById('backup-file-input').click()" style="flex:1;min-width:140px;font-size:13px;border:1px solid #ccc">📂 Herstel backup</button>
-          <input type="file" id="backup-file-input" accept=".json" style="display:none" onchange="herstelBackup(event)">
-        </div>
-      </div>
+
       <div class="form-group"><label>Website</label><input type="text" id="s-web" value="www.maseto.nl"></div>
       <div class="form-group"><label>Telefoon</label><input type="text" id="s-tel" value="+31 (0)85 064 54 19"></div>
       <div class="form-group"><label>Email</label><input type="email" id="s-email" value="info@maseto.nl"></div>
@@ -1690,6 +1683,21 @@ ASML B.V.,Jan de Vries,Eindhoven..." style="width:100%;padding:9px 12px;border:1
           <tbody id="maand-tbody"></tbody>
         </table>
       </div>
+    </div>
+    <div class="card" style="margin-bottom:1rem">
+      <div class="card-title">💾 Data backup</div>
+      <div style="font-size:13px;color:var(--text-muted);margin-bottom:1rem">Sla alle facturen, klanten en instellingen op als bestand. Herstel bij een nieuwe app versie of na een herinstallatie.</div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn primary" onclick="downloadBackup()" style="flex:1;min-width:140px;font-size:13px">💾 Download backup</button>
+        <button class="btn" onclick="downloadApp()" style="flex:1;min-width:140px;font-size:13px">⬇ Download app</button>
+        <button class="btn" onclick="document.getElementById('backup-file-input').click()" style="flex:1;min-width:140px;font-size:13px;border:1px solid var(--border-mid)">📂 Herstel backup</button>
+        <input type="file" id="backup-file-input" accept=".json" style="display:none" onchange="herstelBackup(event)">
+      </div>
+    </div>
+    <div style="text-align:center;padding:1.5rem 0 0.5rem;font-size:11px;color:var(--text-hint);line-height:1.8">
+      © 2024–2026 Maseto BV · Alle rechten voorbehouden<br>
+      Dit programma is exclusief ontwikkeld voor intern gebruik door Maseto BV.<br>
+      Ongeautoriseerd gebruik, kopiëren of verspreiden is niet toegestaan.
     </div>
   </div>
 </div>
@@ -1871,9 +1879,9 @@ ASML B.V.,Jan de Vries,Eindhoven..." style="width:100%;padding:9px 12px;border:1
     </div>
     <div id="prog-ws-velden">
       <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px">
-        <div class="form-group"><label>Jaarsalaris (€)</label><input type="number" id="prog-salaris" placeholder="0" step="500" oninput="berekenProgFee()"></div>
+        <div class="form-group"><label>Maandsalaris (€)</label><input type="number" id="prog-maandsalaris" placeholder="0" step="100" oninput="berekenProgFee()"></div>
         <div class="form-group"><label>Fee %</label><input type="number" id="prog-fee-pct" placeholder="20" value="20" step="0.5" oninput="berekenProgFee()"></div>
-        <div class="form-group"><label>Fee totaal (€)</label><input type="number" id="prog-fee" placeholder="0" step="100"></div>
+        <div class="form-group"><label>Fee totaal (€) <span style="font-size:10px;color:var(--text-hint)">incl. 8% vak.geld</span></label><input type="number" id="prog-fee" placeholder="0" step="100"></div>
       </div>
     </div>
     <div id="prog-interim-velden" style="display:none">
@@ -2661,7 +2669,7 @@ function bouwFactuurHTML(f, inst) {
       '<div style="min-width:260px">' +
         '<div style="display:flex;justify-content:space-between;font-size:13px;padding:4px 0;color:#555"><span>Subtotaal excl. BTW</span><span>€ ' + (f.subtotaal||0).toFixed(2).replace('.',',') + '</span></div>' +
         '<div style="display:flex;justify-content:space-between;font-size:13px;padding:4px 0;color:#555"><span>BTW</span><span>€ ' + (f.btwTotaal||0).toFixed(2).replace('.',',') + '</span></div>' +
-        '<div style="display:flex;justify-content:space-between;font-size:16px;font-weight:600;padding:10px 0 0;border-top:2px solid #1D9E75;margin-top:6px;color:#1D9E75"><span>Totaal incl. BTW</span><span>€ ' + (f.grand||0).toFixed(2).replace('.',',') + '</span></div>' +
+        '<div style="display:flex;justify-content:space-between;font-size:16px;font-weight:600;padding:10px 0 0;border-top:2px solid #1D9E75;margin-top:6px;color:#1D9E75"><span>' + (f.doctype==='creditnota' ? 'Totaal te verrekenen incl. BTW' : 'Totaal incl. BTW') + '</span><span>€ ' + (f.grand||0).toFixed(2).replace('.',',') + '</span></div>' +
       '</div>' +
     '</div>' +
 
@@ -3598,18 +3606,31 @@ function updateWSOmschrijving() {
 
 
 function berekenWSFee() {
-  var salaris = parseFloat(document.getElementById('f-jaarsalaris') ? document.getElementById('f-jaarsalaris').value : 0) || 0;
+  var maand = parseFloat(document.getElementById('f-maandsalaris') ? document.getElementById('f-maandsalaris').value : 0) || 0;
   var pct = parseFloat(document.getElementById('f-fee-pct') ? document.getElementById('f-fee-pct').value : 20) || 20;
-  var fee = Math.round(salaris * pct / 100 * 100) / 100;
+  var jaarsalaris = Math.round(maand * 12 * 1.08 * 100) / 100;
+  var fee = Math.round(jaarsalaris * pct / 100 * 100) / 100;
+  // Update readonly fee veld
+  var feeVeld = document.getElementById('f-jaarsalaris');
+  if(feeVeld && maand > 0) feeVeld.value = fee;
   var preview = document.getElementById('f-ws-fee-preview');
-  if(salaris > 0) {
-    if(preview) { preview.style.display = 'block'; preview.textContent = 'Fee: ' + pct + '% van ' + fmt(salaris) + ' = ' + fmt(fee) + ' excl. BTW'; }
+  if(maand > 0) {
+    if(preview) { preview.style.display = 'block'; preview.textContent = 'Jaarsalaris incl. vak.geld: ' + fmt(jaarsalaris) + ' → Fee: ' + pct + '% = ' + fmt(fee) + ' excl. BTW'; }
     if(factuurRegels.length > 0) {
       factuurRegels[0].prijs = fee;
       updateWSOmschrijving();
     }
   } else {
     if(preview) preview.style.display = 'none';
+  }
+}
+
+function berekenWSFeeHandmatig() {
+  // Als fee handmatig aangepast wordt
+  var fee = parseFloat(document.getElementById('f-jaarsalaris') ? document.getElementById('f-jaarsalaris').value : 0) || 0;
+  if(factuurRegels.length > 0) {
+    factuurRegels[0].prijs = fee;
+    updateWSOmschrijving();
   }
 }
 
@@ -3912,7 +3933,8 @@ function openProgModal(type, id) {
   document.getElementById('prog-ws-datums').style.display = t === 'ws' ? 'block' : 'none';
 
   if(t === 'ws') {
-    document.getElementById('prog-salaris').value = p && p.salaris ? p.salaris : '';
+    document.getElementById('prog-maandsalaris').value = p && p.maandsalaris ? p.maandsalaris : '';
+    document.getElementById('prog-fee').value = p && p.fee ? p.fee : '';
     document.getElementById('prog-fee-pct').value = p && p.feePct ? p.feePct : 20;
     document.getElementById('prog-fee').value = p && p.fee ? p.fee : '';
     document.getElementById('prog-datum-velden').innerHTML = '';
@@ -3936,9 +3958,26 @@ function openProgModal(type, id) {
 }
 
 function berekenProgFee() {
-  var sal = parseFloat(document.getElementById('prog-salaris').value) || 0;
+  var maand = parseFloat(document.getElementById('prog-maandsalaris') ? document.getElementById('prog-maandsalaris').value : 0) || 0;
   var pct = parseFloat(document.getElementById('prog-fee-pct').value) || 20;
-  if(sal > 0) document.getElementById('prog-fee').value = Math.round(sal * pct / 100);
+  if(maand > 0) {
+    var jaarsalaris = Math.round(maand * 12 * 1.08 * 100) / 100;
+    var fee = Math.round(jaarsalaris * pct / 100 * 100) / 100;
+    document.getElementById('prog-fee').value = fee;
+    // Auto-distribute over datum rows
+    verdeelProgFeeOverDatums(fee);
+  }
+}
+
+function verdeelProgFeeOverDatums(fee) {
+  var rows = document.getElementById('prog-datum-velden') ? document.getElementById('prog-datum-velden').querySelectorAll('[id^="prog-datum-row-"]') : [];
+  if(!rows.length) return;
+  var perRij = Math.round(fee / rows.length * 100) / 100;
+  rows.forEach(function(row, i) {
+    var idx = row.id.replace('prog-datum-row-', '');
+    var bedragEl = document.getElementById('progd-bedrag-' + idx);
+    if(bedragEl) bedragEl.value = perRij;
+  });
 }
 
 var _progDatumIdx = 0;
@@ -3951,8 +3990,15 @@ function voegProgDatumToe(bestaand) {
     '<input type="date" id="progd-datum-' + idx + '" value="' + (bestaand && bestaand.datum ? bestaand.datum : '') + '" style="width:100%;padding:8px 10px;border:1px solid var(--border-mid);border-radius:8px;background:var(--bg);color:var(--text);font-size:13px"></div>' +
     '<div style="flex:1"><label style="font-size:12px;color:var(--text-muted)">Bedrag (€)</label>' +
     '<input type="number" id="progd-bedrag-' + idx + '" value="' + (bestaand && bestaand.bedrag ? bestaand.bedrag : '') + '" placeholder="0" step="0.01" style="width:100%;padding:8px 10px;border:1px solid var(--border-mid);border-radius:8px;background:var(--bg);color:var(--text);font-size:13px"></div>' +
-    '<button onclick="this.parentNode.remove()" style="margin-top:18px;background:none;border:none;cursor:pointer;color:var(--text-hint);font-size:18px;padding:4px">x</button>';
+    '<button onclick="this.parentNode.remove(); setTimeout(function(){ var fee=parseFloat(document.getElementById(\'prog-fee\').value)||0; if(fee>0) verdeelProgFeeOverDatums(fee); },50);" style="margin-top:18px;background:none;border:none;cursor:pointer;color:var(--text-hint);font-size:18px;padding:4px">x</button>';
   document.getElementById('prog-datum-velden').appendChild(row);
+  // Auto-redistribute if fee is set and this is a new (not loaded) datum
+  if(!bestaand) {
+    setTimeout(function() {
+      var fee = parseFloat(document.getElementById('prog-fee').value) || 0;
+      if(fee > 0) verdeelProgFeeOverDatums(fee);
+    }, 50);
+  }
 }
 
 function slaProgOp() {
@@ -3970,7 +4016,7 @@ function slaProgOp() {
   p.notitie = document.getElementById('prog-notitie').value.trim();
 
   if(t === 'ws') {
-    p.salaris = parseFloat(document.getElementById('prog-salaris').value)||0;
+    p.maandsalaris = parseFloat(document.getElementById('prog-maandsalaris').value)||0;
     p.feePct = parseFloat(document.getElementById('prog-fee-pct').value)||20;
     p.fee = parseFloat(document.getElementById('prog-fee').value)||0;
     p.datums = [];
